@@ -14,6 +14,9 @@ document.addEventListener("DOMContentLoaded", function() {
     const MARS_WIDTH = 500;             // [px]
     const MARS_HEIGHT = 500;            // [px]
 
+    const OL0_NEW_CLASS = 'engage';     // class to add to first
+                                        // ordered list
+
     //-----------------------------------------------------------------
     // update the main title
     //-----------------------------------------------------------------
@@ -43,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
         MAIN_TITLE_EL.insertBefore(THIS_EMPH_EL, NEW0_MAIN_TITLE);
 
         // create and insert the next split
-        let NEXT_SPLIT_TEXT = document.createTextNode(SPLIT);
+        const NEXT_SPLIT_TEXT = document.createTextNode(SPLIT);
         MAIN_TITLE_EL.insertBefore(NEXT_SPLIT_TEXT, NEW0_MAIN_TITLE);
     } // for (const SPLIT of EMPH_SPLITS)
 
@@ -65,6 +68,15 @@ document.addEventListener("DOMContentLoaded", function() {
     // size the image element
     IMG_EL0.setAttribute('width', `${MARS_WIDTH}`);
     IMG_EL0.setAttribute('height', `${MARS_HEIGHT}`);
+
+    //-----------------------------------------------------------------
+    // update the first ordered list
+    //-----------------------------------------------------------------
+
+    // get the first ordered list
+    const OL_EL0 = document.querySelector('ol');
+    // change the class of the ordered list
+    OL_EL0.classList.add(OL0_NEW_CLASS);
 
     console.log('Done.');
 

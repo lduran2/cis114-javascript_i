@@ -1,5 +1,8 @@
+v1.2.0 - 2021-11-08t18:37	Leomar Duran <https://github.com/lduran2>
+	fixer.js: change the class of the ordered list
+
 v1.1.0 - 2021-11-08t18:27	Leomar Duran <https://github.com/lduran2>
-	fixer.js: update the main title
+	fixer.js: added emphasis to all "this" the main title
 
 v1.0.2 - 2021-11-08t17:31	Leomar Duran <https://github.com/lduran2>
 	fixer.js: size the Mars image
