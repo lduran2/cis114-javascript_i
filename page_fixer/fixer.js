@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const H3_EL = document.createElement('h3'); // a level 3 heading
                                                 // element
     const H3_TAGNAME = H3_EL.tagName;   // its exptected tag name
-    const KNOWLEDGES_HEAD_APPEND = 'about JavaScript';  // string to
+    const KNOWLEDGES_HEAD_APPEND = ' about JavaScript'; // string to
                                                 // add to the heading
 
     //-----------------------------------------------------------------
@@ -102,7 +102,13 @@ document.addEventListener("DOMContentLoaded", function() {
         // update to the previous sibling
         knowledges_head_el = knowledges_head_el.previousSibling;
     } // end while (H3_TAGNAME != knowledges_head_el.tagName)
-    console.log(knowledges_head_el);
+
+    // create the text node and append it to the end of the heading
+    const KNOWLEDGES_HEAD_APPEND_TEXT =
+        document.createTextNode(KNOWLEDGES_HEAD_APPEND);
+    knowledges_head_el.append(KNOWLEDGES_HEAD_APPEND_TEXT);
+
+    
 
     console.log('Done.');
 
