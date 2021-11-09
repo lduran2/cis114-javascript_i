@@ -11,6 +11,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // for main-title
     const TO_EMPH = 'this';  // word to emphasize in main title
+    // create the emphasis that says `${TO_EMPH}`
+    const THIS_EMPH_EL = document.createElement('em');  // emphasis element
+    const THIS_TEXT = document.createTextNode(TO_EMPH);
+    THIS_EMPH_EL.appendChild(THIS_TEXT);
 
     // for the Mars image
     const MARS_FILENAME = 'mars.jpg';   // Mars image file name
@@ -45,12 +49,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // loop through the emphasis splits
     for (const SPLIT of EMPH_SPLITS) {
-        // create and insert the emphasis that says `${TO_EMPH}`
-        // after first element
-        const THIS_EMPH_EL = document.createElement('em');
-        const THIS_TEXT = document.createTextNode(TO_EMPH);
-        THIS_EMPH_EL.appendChild(THIS_TEXT);
-        MAIN_TITLE_EL.insertBefore(THIS_EMPH_EL, MAIN_TITLE_EL.children[1]);
+        // clone and insert the emphasis after first element
+        MAIN_TITLE_EL.insertBefore(
+            THIS_EMPH_EL.cloneNode(true), MAIN_TITLE_EL.children[1]);
 
         // create and insert the next split
         const NEXT_SPLIT_TEXT = document.createTextNode(SPLIT);
@@ -104,6 +105,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const KNOWLEDGES_HEAD_APPEND_TEXT =
         document.createTextNode(KNOWLEDGES_HEAD_APPEND);
     knowledges_head_el.append(KNOWLEDGES_HEAD_APPEND_TEXT);
+
+    
 
     console.log('Done.');
 

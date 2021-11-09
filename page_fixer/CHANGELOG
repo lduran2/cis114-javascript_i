@@ -1,5 +1,8 @@
 v1.3.2 - 2021-11-08t19:10	Leomar Duran <https://github.com/lduran2>
-	fixer.js: optimized the 'this' emphasis to replace original text
+	fixer.js:
+		optimized the 'this' emphasis to replace original text
+		cloning the 'this' emphasis, rather than reconstructing each
+			time
 
 v1.3.1 - 2021-11-08t19:10	Leomar Duran <https://github.com/lduran2>
 	fixer.js: appended text to the heading of the knowledge list
