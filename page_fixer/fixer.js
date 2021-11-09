@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // for the knowledge list
     const H3_EL = document.createElement('h3'); // a level 3 heading
                                                 // element
-    const H3_TAGNAME = H3_EL.tagName;   // its exptected tag name
+    const H3_NODENAME = H3_EL.nodeName;   // its exptected tag name
     const KNOWLEDGES_HEAD_APPEND = ' about JavaScript'; // string to
                                                 // add to the heading
     // new item to add to the knowledge list
@@ -67,6 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // loop through the emphasis splits
     for (const SPLIT of EMPH_SPLITS) {
         // clone and insert the emphasis after first element
+        // https://developer.mozilla.org/en-US/docs/Web/API/Node/cloneNode
         MAIN_TITLE_EL.insertBefore(
             THIS_EMPH_EL.cloneNode(true), MAIN_TITLE_EL.children[1]);
         // create and insert the next split
@@ -112,10 +113,10 @@ document.addEventListener("DOMContentLoaded", function() {
     // find the previous heading node
     let knowledges_head_el = KNOWLEDGES_EL;
     // while not a heading element
-    while (H3_TAGNAME != knowledges_head_el.tagName) {
+    while (H3_NODENAME != knowledges_head_el.nodeName) {
         // update to the previous sibling
         knowledges_head_el = knowledges_head_el.previousSibling;
-    } // end while (H3_TAGNAME != knowledges_head_el.tagName)
+    } // end while (H3_NODENAME != knowledges_head_el.nodeName)
 
     // create the text node and append it to the end of the heading
     const KNOWLEDGES_HEAD_APPEND_TEXT =
@@ -137,12 +138,14 @@ document.addEventListener("DOMContentLoaded", function() {
     for (const KNOWLEDGE of NEW_KNOWLEDGES) {
         // clone the first current item
         const NEW_KNOWLEDGE_EL = CURR_KNOWLEDGES_LI_ELS[0].cloneNode(true);
+        // remove the ID in case it's duplicate
+        NEW_KNOWLEDGE_EL.removeAttribute('id');
         // update the text
         NEW_KNOWLEDGE_EL.firstChild.nodeValue = KNOWLEDGE.text;
         // insert the element
         KNOWLEDGES_EL.insertBefore(
             NEW_KNOWLEDGE_EL, CURR_KNOWLEDGES_LI_ELS[KNOWLEDGE.index]);
-    } // for (const KNOWLEDGE of NEW_KNOWLEDGES)
+    } // end for (const KNOWLEDGE of NEW_KNOWLEDGES)
 
     // remove the element to be removed
     KNOWLEDGES_EL.removeChild(CURR_KNOWLEDGES_LI_ELS[I_KNOWLEDGE_TO_REMOVE]);
@@ -156,6 +159,40 @@ document.addEventListener("DOMContentLoaded", function() {
     ASIDE_EL.appendChild(ASIDE_TEXT);
     // append to the end of the body element
     BODY_EL.appendChild(ASIDE_EL);
+
+    //-----------------------------------------------------------------
+    // change all .change-me elements to level 6 headings
+    //-----------------------------------------------------------------
+    // get the .change-me elements
+    const CHANGE_ME_ELS = BODY_EL.querySelectorAll('.change-me');
+
+    // loop through .change-me elements
+    for (const OLD_EL of CHANGE_ME_ELS) {
+        // create the headings
+        const H6_EL = document.createElement('h6');
+
+        // copy all attributes
+        // loop through all attributes
+        // https://developer.mozilla.org/en-US/docs/Web/API/Element/attributes
+        for (const ATTRIBUTE of OLD_EL.attributes) {
+            // set the attribute of the h6 according to this
+            // attribute's name and value
+            // https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute
+            H6_EL.setAttribute(ATTRIBUTE.name, ATTRIBUTE.value);
+        } // end for (const ATTRIBUTE of OLD_EL.attributes)
+
+        // copy all child nodes
+        // loop through all child nodes (including non-elements)
+        // https://developer.mozilla.org/en-US/docs/Web/API/Node/childNodes
+        // @see https://developer.mozilla.org/en-US/docs/Web/API/Element/children
+        for (const CHILD_NODE of OLD_EL.childNodes) {
+            H6_EL.appendChild(CHILD_NODE);
+        } // end for (const CHILD_NODE of OLD_EL.childNodes)
+
+        // replace the .change-me element
+        // https://developer.mozilla.org/en-US/docs/Web/API/Node/replaceChild
+        OLD_EL.parentNode.replaceChild(H6_EL, OLD_EL);
+    } // end for (const OLD_EL of CHANGE_ME_ELS)
 
     console.log('Done.');
 

@@ -1,4 +1,7 @@
-v1.4.0 - 2021-11-08t21:32	Leomar Duran <https://github.com/lduran2>
+v1.6.0 - 2021-11-08t23:19	Leomar Duran <https://github.com/lduran2>
+	fixer.js: change all .change-me elements to level 6 headings
+
+v1.5.0 - 2021-11-08t21:40	Leomar Duran <https://github.com/lduran2>
 	fixer.js: add an aside at the end of the web page
 
 v1.4.0 - 2021-11-08t21:32	Leomar Duran <https://github.com/lduran2>
