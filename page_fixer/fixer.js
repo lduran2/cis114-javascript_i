@@ -31,18 +31,22 @@ document.addEventListener("DOMContentLoaded", function() {
     const H3_TAGNAME = H3_EL.tagName;   // its exptected tag name
     const KNOWLEDGES_HEAD_APPEND = ' about JavaScript'; // string to
                                                 // add to the heading
-
-    // new elements to add to the knowledge list
+    // new item to add to the knowledge list
     const NEW_KNOWLEDGES = [
         { index: 0, text: 'Relation to HTML' },
         { index: 1, text: 'Syntax' },
         { index: 6, text: 'Using the DOM' }
     ];
-    const I_KNOWLEDGE_TO_REMOVE = 2;
+    const I_KNOWLEDGE_TO_REMOVE = 2;    // old item to remove
+
+    // for the aside
+    // the text to mark up as aside
+    const ASIDE = 'JavaScript is only fun when we can use it to manipulate HTML!';
 
     //-----------------------------------------------------------------
 
     // get the body element
+    // optimizes future queries
     const BODY_EL = document.querySelector('body');
 
     //-----------------------------------------------------------------
@@ -119,10 +123,13 @@ document.addEventListener("DOMContentLoaded", function() {
     knowledges_head_el.append(KNOWLEDGES_HEAD_APPEND_TEXT);
 
     //-----------------------------------------------------------------
-    // append items to the knowledge list
+    // add items to the knowledge list
+    // remove items from the knowledge list
     //-----------------------------------------------------------------
 
     // get the current items of the knowledge list
+    // the :scope pseudo-class selects the current element
+    // the > operator selects only children of the preceding elements
     const CURR_KNOWLEDGES_LI_ELS = KNOWLEDGES_EL.querySelectorAll(':scope > li');
 
     // for every new knowledge, insert it in the correct place in the list
@@ -139,6 +146,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // remove the element to be removed
     KNOWLEDGES_EL.removeChild(CURR_KNOWLEDGES_LI_ELS[I_KNOWLEDGE_TO_REMOVE]);
+
+    //-----------------------------------------------------------------
+    // add an aside at the end of the web page
+    //-----------------------------------------------------------------
+    // create the aside
+    const ASIDE_EL = document.createElement('aside');
+    const ASIDE_TEXT = document.createTextNode(ASIDE);
+    ASIDE_EL.appendChild(ASIDE_TEXT);
+    // append to the end of the body element
+    BODY_EL.appendChild(ASIDE_EL);
 
     console.log('Done.');
 
