@@ -32,12 +32,25 @@ document.addEventListener("DOMContentLoaded", function() {
     const KNOWLEDGES_HEAD_APPEND = ' about JavaScript'; // string to
                                                 // add to the heading
 
+    // new elements to add to the knowledge list
+    const NEW_KNOWLEDGES = [
+        { index: 0, text: 'Relation to HTML' },
+        { index: 1, text: 'Syntax' },
+        { index: 6, text: 'Using the DOM' }
+    ];
+    const I_KNOWLEDGE_TO_REMOVE = 2;
+
+    //-----------------------------------------------------------------
+
+    // get the body element
+    const BODY_EL = document.querySelector('body');
+
     //-----------------------------------------------------------------
     // add emphasis to the main title
     //-----------------------------------------------------------------
 
     // get the main title
-    const MAIN_TITLE_EL = document.querySelector('#main-title');
+    const MAIN_TITLE_EL = BODY_EL.querySelector('#main-title');
     // split up the text by occurances of `${TO_EMPH}`
     const EMPH_SPLITS = MAIN_TITLE_EL.firstChild.nodeValue
         .split(TO_EMPH);
@@ -52,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function() {
         // clone and insert the emphasis after first element
         MAIN_TITLE_EL.insertBefore(
             THIS_EMPH_EL.cloneNode(true), MAIN_TITLE_EL.children[1]);
-
         // create and insert the next split
         const NEXT_SPLIT_TEXT = document.createTextNode(SPLIT);
         MAIN_TITLE_EL.insertBefore(
@@ -64,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //-----------------------------------------------------------------
 
     // get the first image element
-    const IMG_EL0 = document.querySelector('img');
+    const IMG_EL0 = BODY_EL.querySelector('img');
 
     // load the Mars image
     const MARS_FILE = new Image();      // the Mars file
@@ -82,17 +94,17 @@ document.addEventListener("DOMContentLoaded", function() {
     // update the first ordered list's class list
     //-----------------------------------------------------------------
     // get the first ordered list
-    const OL_EL0 = document.querySelector('ol');
+    const OL_EL0 = BODY_EL.querySelector('ol');
     // change the class of the ordered list
     OL_EL0.classList.add(OL0_NEW_CLASS);
 
     //-----------------------------------------------------------------
-    // append to the text of level 3 heading
+    // append to the text of the knowledge list heading
     //-----------------------------------------------------------------
 
     // find the heading before the knowledge list
     // get the knowledge list
-    const KNOWLEDGES_EL = document.querySelector('#knowledge-list');
+    const KNOWLEDGES_EL = BODY_EL.querySelector('#knowledge-list');
     // find the previous heading node
     let knowledges_head_el = KNOWLEDGES_EL;
     // while not a heading element
@@ -106,7 +118,27 @@ document.addEventListener("DOMContentLoaded", function() {
         document.createTextNode(KNOWLEDGES_HEAD_APPEND);
     knowledges_head_el.append(KNOWLEDGES_HEAD_APPEND_TEXT);
 
-    
+    //-----------------------------------------------------------------
+    // append items to the knowledge list
+    //-----------------------------------------------------------------
+
+    // get the current items of the knowledge list
+    const CURR_KNOWLEDGES_LI_ELS = KNOWLEDGES_EL.querySelectorAll(':scope > li');
+
+    // for every new knowledge, insert it in the correct place in the list
+    // loop through the `NEW_KNOWLEDGES`
+    for (const KNOWLEDGE of NEW_KNOWLEDGES) {
+        // clone the first current item
+        const NEW_KNOWLEDGE_EL = CURR_KNOWLEDGES_LI_ELS[0].cloneNode(true);
+        // update the text
+        NEW_KNOWLEDGE_EL.firstChild.nodeValue = KNOWLEDGE.text;
+        // insert the element
+        KNOWLEDGES_EL.insertBefore(
+            NEW_KNOWLEDGE_EL, CURR_KNOWLEDGES_LI_ELS[KNOWLEDGE.index]);
+    } // for (const KNOWLEDGE of NEW_KNOWLEDGES)
+
+    // remove the element to be removed
+    KNOWLEDGES_EL.removeChild(CURR_KNOWLEDGES_LI_ELS[I_KNOWLEDGE_TO_REMOVE]);
 
     console.log('Done.');
 
