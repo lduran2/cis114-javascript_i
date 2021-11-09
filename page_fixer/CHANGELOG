@@ -1,3 +1,6 @@
+v1.3.2 - 2021-11-08t19:10	Leomar Duran <https://github.com/lduran2>
+	fixer.js: optimized the 'this' emphasis to replace original text
+
 v1.3.1 - 2021-11-08t19:10	Leomar Duran <https://github.com/lduran2>
 	fixer.js: appended text to the heading of the knowledge list
 
@@ -8,7 +11,7 @@ v1.2.0 - 2021-11-08t18:37	Leomar Duran <https://github.com/lduran2>
 	fixer.js: change the class of the ordered list
 
 v1.1.0 - 2021-11-08t18:27	Leomar Duran <https://github.com/lduran2>
-	fixer.js: added emphasis to all "this" the main title
+	fixer.js: added emphasis to all 'this' the main title
 
 v1.0.2 - 2021-11-08t17:31	Leomar Duran <https://github.com/lduran2>
 	fixer.js: size the Mars image

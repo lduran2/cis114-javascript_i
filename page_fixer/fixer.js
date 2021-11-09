@@ -37,13 +37,8 @@ document.addEventListener("DOMContentLoaded", function() {
     // split up the text by occurances of `${TO_EMPH}`
     const EMPH_SPLITS = MAIN_TITLE_EL.firstChild.nodeValue
         .split(TO_EMPH);
-    // remove the original text
-    MAIN_TITLE_EL.removeChild(MAIN_TITLE_EL.firstChild);
-    // capture new first element
-    const NEW0_MAIN_TITLE = MAIN_TITLE_EL.firstChild;
-    // create and insert the first split
-    const SPLIT0_TEXT = document.createTextNode(EMPH_SPLITS.shift());
-    MAIN_TITLE_EL.insertBefore(SPLIT0_TEXT, NEW0_MAIN_TITLE);
+    // update the original text
+    MAIN_TITLE_EL.firstChild.nodeValue = EMPH_SPLITS.shift();
 
     // for every instance of `${TO_EMPH}` in the original,
     // add an emphasis of `${TO_EMPH}`, and 
@@ -51,14 +46,16 @@ document.addEventListener("DOMContentLoaded", function() {
     // loop through the emphasis splits
     for (const SPLIT of EMPH_SPLITS) {
         // create and insert the emphasis that says `${TO_EMPH}`
+        // after first element
         const THIS_EMPH_EL = document.createElement('em');
         const THIS_TEXT = document.createTextNode(TO_EMPH);
         THIS_EMPH_EL.appendChild(THIS_TEXT);
-        MAIN_TITLE_EL.insertBefore(THIS_EMPH_EL, NEW0_MAIN_TITLE);
+        MAIN_TITLE_EL.insertBefore(THIS_EMPH_EL, MAIN_TITLE_EL.children[1]);
 
         // create and insert the next split
         const NEXT_SPLIT_TEXT = document.createTextNode(SPLIT);
-        MAIN_TITLE_EL.insertBefore(NEXT_SPLIT_TEXT, NEW0_MAIN_TITLE);
+        MAIN_TITLE_EL.insertBefore(
+            NEXT_SPLIT_TEXT, MAIN_TITLE_EL.children[1]);
     } // end for (const SPLIT of EMPH_SPLITS)
 
     //-----------------------------------------------------------------
@@ -107,8 +104,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const KNOWLEDGES_HEAD_APPEND_TEXT =
         document.createTextNode(KNOWLEDGES_HEAD_APPEND);
     knowledges_head_el.append(KNOWLEDGES_HEAD_APPEND_TEXT);
-
-    
 
     console.log('Done.');
 
