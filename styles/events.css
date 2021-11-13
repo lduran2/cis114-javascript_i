@@ -1,0 +1,22 @@
+body {
+	color: black;
+	background: white;
+}
+
+h1 {
+	font-size: 2em;
+}
+
+.activated {
+	color: rgb(255, 199, 44);
+	background: black;
+	border: 0.5em solid;
+	padding: 0.5em;
+}
+
+/*
+ * References
+ *
+ * College colors. (2021). Community College of Philadelphia. Retrieved from
+ * <file:///C:/Users/Leo%20Duran/Downloads/cis/114/cis114-javascript_i/events/index.html>.
+ */
