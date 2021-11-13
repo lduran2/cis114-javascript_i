@@ -10,16 +10,19 @@
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/scripts/events.js
  *
  * CHANGELOG :
- *     v1.0.4 - 2021-11-12t23:14
+ *     v1.1.4 - 2021-11-12t23:14
+ *         added event listener to each list item
+ *
+ *     v1.1.3 - 2021-11-12t23:14
  *         clicking toggles using `Elements.classList.toggle`
  *
- *     v1.0.3 - 2021-11-12t23:03
+ *     v1.1.2 - 2021-11-12t23:03
  *         clicking toggles the event class
  *
- *     v1.0.2 - 2021-11-12t22:48
+ *     v1.1.1 - 2021-11-12t22:48
  *         clicking always adds activated class
  *
- *     v1.0.1 - 2021-11-12t22:43
+ *     v1.1.0 - 2021-11-12t22:43
  *         added heading 1 event listener
  *
  *     v1.0.0 - 2021-11-12t22:10
