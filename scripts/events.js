@@ -43,10 +43,26 @@ function toggleActivate(evnt) {
      * @see https://github.com/lduran2/cis114-javascript_i/blob/52552c306899a9068e0dc343f05c39b5dfe87199/scripts/events.js
      * A better justification for data attribute is the complexity of
      * calling the contains method followed by add or remove.
+     * Despite the name, Element.classList may actually be a set,
+     * backed by a tree or hashtable, rather than list.
      */
 
      evnt.target.classList.toggle('activated');
 } /* end function toggleActivate(evnt) */
+
+/**
+ * Creates an event listener to update the given DOM node with the
+ * text value of the first child node of the target.
+ * @param node : Node = the node to update
+ */
+function createUpdateNode(node) {
+    /* return the function */
+    return function(evnt) {
+        console.log('createUpdateNode triggered!');
+        console.log(node);
+        console.log(evnt);
+    };
+}
 
 /* add the window load event */
 document.addEventListener('DOMContentLoaded', function (evnt) {
@@ -65,6 +81,14 @@ document.addEventListener('DOMContentLoaded', function (evnt) {
         /* add the event listener */
         H1_EL.addEventListener('click', toggleActivate);
     } /* if (H1_EL) */
+
+    /* create a listener that updates H1_EL */
+    const UPDATE_H1 = createUpdateNode(H1_EL);
+
+    /* for each list element */
+    for (const EL of LI_ELS) {
+        EL.addEventListener('click', UPDATE_H1);
+    } /* end for (const EL of LI_ELS) */
 
     /* main is finished */
     console.log('Done.');
