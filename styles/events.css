@@ -1,3 +1,20 @@
+@charset "utf-8";
+/**
+ * /styles/events.css
+ * Styles used `w9hw-events` "Concepts Assignment - Events".
+ *
+ * By        : Leomar Duran <https://github.com/lduran2>
+ * When      : 2021-11-12t22:23
+ * Where     : Community College of Philadelphia
+ * For       : CIS 114/JavaScript I
+ * Version   : 1.0.0
+ * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/w9hw-events/styles/events.css
+ *
+ * CHANGELOG :
+ *     v1.0.0 - 2021-11-12t22:23
+ *         styled body, h1, and 'activated' class
+ */
+
 body {
 	color: black;
 	background: white;
