@@ -3,13 +3,16 @@
  * Sets up event handlers for `w9hw-events` "Concepts Assignment - Events".
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-11-12t23:35
+ * When      : 2021-11-12t23:49
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.15
+ * Version   : 1.2.0
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/scripts/events.js
  *
  * CHANGELOG :
+ *     v1.2.0 - 2021-11-12t23:49
+ *         implemented updating `h1` to list item's text
+ *
  *     v1.1.5 - 2021-11-12t23:35
  *         restored toggling implementation
  *
@@ -67,17 +70,32 @@ function toggleActivate(evnt) {
 } /* end function toggleActivate(evnt) */
 
 /**
- * Creates an event listener to update the given DOM node with the
- * text value of the first child node of the target.
+ * Creates an event listener to update given DOM node by replacing its
+ * first child node with a clone the child node of the target.
  * @param node : Node = the node to update
  */
 function createUpdateNode(node) {
-    /* return a function in this scope */
+    /* return anonymous function in this scope */
     return function (evnt) {
         /* log the event */
         console.log('createUpdateNode(node)(evnt) triggered!');
         console.log(node);
         console.log(evnt);
+
+        /* check both elements for a first child */
+        if (!evnt.target.firstChild || !node.firstChild) {
+            return;
+        } /* if (!evnt.target.firstChild || !node.firstChild) */
+
+        /* clone the target's first child */
+        const NEW_NODE_CHILD0 = evnt.target.firstChild.cloneNode(true);
+        /* if possible to remove attributes */
+        if (NEW_NODE_CHILD0.removeAttribute) {
+            /* remove the ID to prevent duplicate IDs */
+            NEW_NODE_CHILD0.removeAttribute('id');
+        } /* if (NEW_NODE_CHILD0.removeAttribute) */
+        /* replace the node to update's first child */
+        node.replaceChild(NEW_NODE_CHILD0, node.firstChild);
     }; /* end function createUpdateNode(node)(evnt) */
 } /* end function createUpdateNode(node) */
 
@@ -93,14 +111,14 @@ document.addEventListener('DOMContentLoaded', function (evnt) {
     const H1_EL = BODY_EL.querySelector('h1');        /* first h1 element */
     const LI_ELS = BODY_EL.querySelectorAll('li');  /* list item elements */
 
+    /* create a listener that updates H1_EL */
+    const UPDATE_H1 = createUpdateNode(H1_EL);
+
     /* if H1 found */
     if (H1_EL) {
         /* add the event listener */
         H1_EL.addEventListener('click', toggleActivate);
     } /* if (H1_EL) */
-
-    /* create a listener that updates H1_EL */
-    const UPDATE_H1 = createUpdateNode(H1_EL);
 
     /* for each list element */
     for (const EL of LI_ELS) {
