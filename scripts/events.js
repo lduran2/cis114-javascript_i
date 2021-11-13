@@ -3,13 +3,19 @@
  * Sets up event handlers for `w9hw-events` "Concepts Assignment - Events".
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-11-12t22:48
+ * When      : 2021-11-12t23:14
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.0.2
+ * Version   : 1.0.4
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/scripts/events.js
  *
  * CHANGELOG :
+ *     v1.0.4 - 2021-11-12t23:14
+ *         clicking toggles using `Elements.classList.toggle`
+ *
+ *     v1.0.3 - 2021-11-12t23:03
+ *         clicking toggles the event class
+ *
  *     v1.0.2 - 2021-11-12t22:48
  *         clicking always adds activated class
  *
@@ -30,23 +36,16 @@ function toggleActivate(evnt) {
     console.log('toggleActivate triggered!');
     console.log(evnt);
 
-    /* check the data attribute */
-    /* https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes */
-    /* I use this data attribute in case of a long class list
-     * (searching a list vs searching a hashtable) */
-    /* if not set */
-    if ('data-activated' !== evnt.target.dataset.activated) {
-        /* add the class */
-        evnt.target.classList.add('activated');
-        /* set a data attribute on the target */
-        evnt.target.dataset.activated = 'data-activated';
-    } /* end if ('data-activated' !== evnt.target.dataset.activated) */
-    else {
-        /* remove the class */
-        evnt.target.classList.remove('activated');
-        /* reset a data attribute on the target */
-        evnt.target.dataset.activated = '';
-    } /* end ('data-activated' !== evnt.target.dataset.activated) else */
+    /* Element.classList actually has a toggle method */
+    /* https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/toggle */
+    /**
+     * for an implementation using a data attribute to check,
+     * @see https://github.com/lduran2/cis114-javascript_i/blob/52552c306899a9068e0dc343f05c39b5dfe87199/scripts/events.js
+     * A better justification for data attribute is the complexity of
+     * calling the contains method followed by add or remove.
+     */
+
+     evnt.target.classList.toggle('activated');
 } /* end function toggleActivate(evnt) */
 
 /* add the window load event */
