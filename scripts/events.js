@@ -3,13 +3,16 @@
  * Sets up event handlers for `w9hw-events` "Concepts Assignment - Events".
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-11-12t23:14
+ * When      : 2021-11-12t23:35
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.0.4
+ * Version   : 1.15
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/scripts/events.js
  *
  * CHANGELOG :
+ *     v1.1.5 - 2021-11-12t23:35
+ *         restored toggling implementation
+ *
  *     v1.1.4 - 2021-11-12t23:14
  *         added event listener to each list item
  *
@@ -36,21 +39,31 @@
  */
 function toggleActivate(evnt) {
     /* log the event */
-    console.log('toggleActivate triggered!');
+    console.log('toggleActivate(evnt) triggered!');
     console.log(evnt);
 
-    /* Element.classList actually has a toggle method */
-    /* https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/toggle */
+    /* Element.classList actually has a toggle method,
+     * but this felt like cheating because of the detailed explanation
+     * of toggling in the assignment */
+
+    /* Despite the name, Element.classList may actually be a set,
+     * backed by a tree or hashtable, rather than list. */
     /**
-     * for an implementation using a data attribute to check,
+     * I considered checking/(re)setting a data attribute rather than
+     * using Element.classList.contains, but it's still a similar
+     * complexity, checking 2 trees/hashtables once vs 1 twice.
      * @see https://github.com/lduran2/cis114-javascript_i/blob/52552c306899a9068e0dc343f05c39b5dfe87199/scripts/events.js
-     * A better justification for data attribute is the complexity of
-     * calling the contains method followed by add or remove.
-     * Despite the name, Element.classList may actually be a set,
-     * backed by a tree or hashtable, rather than list.
      */
 
-     evnt.target.classList.toggle('activated');
+    /* if 'activated' is not already in the class list */
+    if (!evnt.target.classList.contains('activated')) {
+        /* add the class */
+        evnt.target.classList.add('activated');
+    } /* end if (!evnt.target.classList.contains('activated')) */
+    else {
+        /* remove the class */
+        evnt.target.classList.remove('activated');
+    } /* end (!evnt.target.classList.contains('activated')) else */
 } /* end function toggleActivate(evnt) */
 
 /**
@@ -59,13 +72,14 @@ function toggleActivate(evnt) {
  * @param node : Node = the node to update
  */
 function createUpdateNode(node) {
-    /* return the function */
-    return function(evnt) {
-        console.log('createUpdateNode triggered!');
+    /* return a function in this scope */
+    return function (evnt) {
+        /* log the event */
+        console.log('createUpdateNode(node)(evnt) triggered!');
         console.log(node);
         console.log(evnt);
-    };
-}
+    }; /* end function createUpdateNode(node)(evnt) */
+} /* end function createUpdateNode(node) */
 
 /* add the window load event */
 document.addEventListener('DOMContentLoaded', function (evnt) {
@@ -95,4 +109,4 @@ document.addEventListener('DOMContentLoaded', function (evnt) {
 
     /* main is finished */
     console.log('Done.');
-});
+}/* end function (evnt) */);
