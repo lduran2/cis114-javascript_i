@@ -26,10 +26,27 @@
  * @param evnt : Event = the event that triggers this listener
  */
 function toggleActivate(evnt) {
-    /* set a data attribute on the target */
-    evnt.target.dataset.activated = 'data-activated';
-    /* add the class */
-    evnt.target.classList.add('activated');
+    /* log the event */
+    console.log('toggleActivate triggered!');
+    console.log(evnt);
+
+    /* check the data attribute */
+    /* https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes */
+    /* I use this data attribute in case of a long class list
+     * (searching a list vs searching a hashtable) */
+    /* if not set */
+    if ('data-activated' !== evnt.target.dataset.activated) {
+        /* add the class */
+        evnt.target.classList.add('activated');
+        /* set a data attribute on the target */
+        evnt.target.dataset.activated = 'data-activated';
+    } /* end if ('data-activated' !== evnt.target.dataset.activated) */
+    else {
+        /* remove the class */
+        evnt.target.classList.remove('activated');
+        /* reset a data attribute on the target */
+        evnt.target.dataset.activated = '';
+    } /* end ('data-activated' !== evnt.target.dataset.activated) else */
 } /* end function toggleActivate(evnt) */
 
 /* add the window load event */
