@@ -3,13 +3,16 @@
  * Sets up event handlers for `w9hw-events` "Concepts Assignment - Events".
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-11-12t22:43
+ * When      : 2021-11-12t22:48
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.0.1
- * Canonical : https://github.com/lduran2/cis114-javascript-projects/blob/master/scripts/map-jnumber.js
+ * Version   : 1.0.2
+ * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/scripts/events.js
  *
  * CHANGELOG :
+ *     v1.0.2 - 2021-11-12t22:48
+ *         clicking always adds activated class
+ *
  *     v1.0.1 - 2021-11-12t22:43
  *         added heading 1 event listener
  *
@@ -19,12 +22,14 @@
 'use strict';
 
 /**
- * Toggles the activate class on the event target.
+ * Toggles the activated class on the event target.
  * @param evnt : Event = the event that triggers this listener
  */
 function toggleActivate(evnt) {
-    console.log('toggleActivate triggered');
-    console.log(evnt);
+    /* set a data attribute on the target */
+    evnt.target.dataset.activated = 'data-activated';
+    /* add the class */
+    evnt.target.classList.add('activated');
 } /* end function toggleActivate(evnt) */
 
 /* add the window load event */
