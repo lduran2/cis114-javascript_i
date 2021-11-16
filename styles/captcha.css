@@ -4,13 +4,17 @@
  * Styles used `w9lab-events` "Events Lab - CAPTCHA".
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-11-15t20:49
+ * When      : 2021-11-15t21:09
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.0.1
+ * Version   : 1.0.2
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/styles/events.css
  *
  * CHANGELOG :
+ *     v1.0.2 - 2021-11-15t21:09
+ *         styled the success/failure message
+ *         fixed the last puzzle tile
+ *
  *     v1.0.1 - 2021-11-15t20:49
  *         styled the captcha puzzle
  *         bigger sequence font
@@ -65,7 +69,15 @@
 }
 
 #puzzle li:nth-child(10) {
-	float: right;
-	margin-right: 33.3%;
+	float: none;
+	margin: auto;
 	border-left-style: solid;
+}
+
+#success-message {
+	clear: both;
+	text-align: center;
+	background: silver;
+	border: 2px solid;
+	width: 758px;
 }
