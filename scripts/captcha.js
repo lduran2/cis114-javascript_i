@@ -3,13 +3,16 @@
  * Sets up the captcha puzzle using DOM, including the event handlers.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-11-15t22:18
+ * When      : 2021-11-15t22:48
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.0.1
+ * Version   : 1.0.2
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/scripts/captcha.js
  *
  * CHANGELOG :
+ *     v1.0.2 - 2021-11-15t22:48
+ *         counting the tile numbers
+ *
  *     v1.0.1 - 2021-11-15t22:18
  *         inserted the sequence element
  *
@@ -23,7 +26,10 @@
  * @param evnt : Event = the event that triggers this listener
  */
 function main(evnt) {
-    const N_SEQUENCE_DIGITS = 3;    /* #(digits to use in the sequence) */
+    const N_SEQUENCE_DIGITS = 3;    /* # digits to use in the sequence */
+    const N_TILES = 10;             /* # clickable tiles */
+    const N_COLS = 3;               /* # columns to organize tiles */
+
     /* get and check the body element */
     const BODY_EL = document.querySelector('body');
     if (!BODY_EL) {
@@ -37,7 +43,10 @@ function main(evnt) {
     } /* if (!INSTRUCTION_EL) */
 
     /* insert sequence of length `N_SEQUENCE_DIGITS` to `INSTRUCTION_EL` */
-    insertSequenceEl(N_SEQUENCE_DIGITS, INSTRUCTION_EL)
+    insertSequenceEl(N_SEQUENCE_DIGITS, INSTRUCTION_EL);
+
+    /* append a puzzle with N_TILES, */
+    appendPuzzle(N_TILES, N_ROWS, BODY_EL);
 
     console.log('Done.');
 } /* end function main() */
@@ -87,6 +96,21 @@ function insertSequenceEl(nSequenceDigits, instructionEl) {
 
     return [ BEFORE_SEQUENCE, SEQUENCE_EL, AFTER_SEQUENCE_TEXT ];
 } /* end function insertSequenceEl(nSequenceDigits, instructionEl) */
+
+function appendPuzzle(nTiles, nCols, bodyEl) {
+    for (let iRow = 1, nRows=((nTiles - 1)/nCols); (iRow <= nRows); ++iRow)
+    {
+        for (let iCol = 1; (iCol <= nCols); ++iCol) {
+            const digit = nCols * (nRows - iRow) + iCol;
+            console.log(digit);
+        }
+    }
+}
+
+function createClickTile(tileNo) {
+    return function (evnt) {
+    };
+}
 
 /* add main to the window load event */
 document.addEventListener('DOMContentLoaded', main);
