@@ -55,11 +55,15 @@
 	float: left;
 }
 
+#puzzle li, #puzzle span {
+	display: block;
+	width: 250px;
+	height: 250px;
+}
+
 #puzzle li {
 	background: silver;
 	border-style: none solid solid none;
-	width: 250px;
-	height: 250px;
 	float: left;
 }
 

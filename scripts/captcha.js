@@ -3,13 +3,16 @@
  * Sets up the captcha puzzle using DOM, including the event handlers.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-11-15t22:48
+ * When      : 2021-11-15t23:00
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.0.2
+ * Version   : 1.0.3
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/scripts/captcha.js
  *
  * CHANGELOG :
+ *     v1.0.3 - 2021-11-15t23:00
+ *         added listener to each tile
+ *
  *     v1.0.2 - 2021-11-15t22:48
  *         counting the tile numbers
  *
@@ -46,7 +49,7 @@ function main(evnt) {
     insertSequenceEl(N_SEQUENCE_DIGITS, INSTRUCTION_EL);
 
     /* append a puzzle with N_TILES, */
-    appendPuzzle(N_TILES, N_ROWS, BODY_EL);
+    appendPuzzle(N_TILES, N_COLS, BODY_EL);
 
     console.log('Done.');
 } /* end function main() */
@@ -98,19 +101,40 @@ function insertSequenceEl(nSequenceDigits, instructionEl) {
 } /* end function insertSequenceEl(nSequenceDigits, instructionEl) */
 
 function appendPuzzle(nTiles, nCols, bodyEl) {
+    /* create puzzle list */
+    const PUZZLE_EL = document.createElement('ol');
+    PUZZLE_EL.setAttribute('id', 'puzzle');
+
+    /* row loop */
     for (let iRow = 1, nRows=((nTiles - 1)/nCols); (iRow <= nRows); ++iRow)
     {
+        /* column loop */
         for (let iCol = 1; (iCol <= nCols); ++iCol) {
-            const digit = nCols * (nRows - iRow) + iCol;
-            console.log(digit);
-        }
-    }
-}
+            /* calculate the digit */
+            const DIGIT = nCols * (nRows - iRow) + iCol;
+            /* create list items and spans */
+            const LI_EL = document.createElement('li');
+            const SPAN_EL = document.createElement('span');
+            /* add the click listener with the current digit */
+            SPAN_EL.addEventListener('click', createClickTile(DIGIT));
+            /* put together and append to puzzle */
+            LI_EL.appendChild(SPAN_EL);
+            PUZZLE_EL.appendChild(LI_EL);
+        } /* for (let iCol = 1; (iCol <= nCols); ++iCol) */
+    } /* for (let iRow = 1, nRows=((nTiles - 1)/nCols); (iRow <= nRows); ++iRow) */
+
+    /* append the puzzle element to end of the body */
+    bodyEl.append(PUZZLE_EL);
+} /* end function appendPuzzle(nTiles, nCols, bodyEl) */
 
 function createClickTile(tileNo) {
     return function (evnt) {
-    };
-}
+        /* log the event */
+        console.log('createClickTile(tileNo)(evnt)');
+        console.log(tileNo);
+        console.log(evnt);
+    }; /* return function (evnt) */
+} /* function createClickTile(tileNo) */
 
 /* add main to the window load event */
 document.addEventListener('DOMContentLoaded', main);
