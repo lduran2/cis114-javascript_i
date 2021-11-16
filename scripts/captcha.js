@@ -3,13 +3,16 @@
  * Sets up the captcha puzzle using DOM, including the event handlers.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-11-15t23:27
+ * When      : 2021-11-15t23:36
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.0.5
+ * Version   : 1.1.0
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/scripts/captcha.js
  *
  * CHANGELOG :
+ *     v1.1.0 - 2021-11-15t23:36
+ *         showing randomized sequence
+ *
  *     v1.0.5 - 2021-11-15t23:27
  *         set up success message, array randomized
  *
@@ -51,11 +54,20 @@ function main(evnt) {
         return;
     } /* if (!INSTRUCTION_EL) */
 
-    /* create the sequence array */
+    /* shuffle the numbers */
     const RANDOM_NUMBERS = getRandomArray(N_TILES);
+    /* splice off the sequence array */
+    const SEQUENCE = RANDOM_NUMBERS.splice(N_TILES - N_SEQUENCE_DIGITS);
+    /* map to number and activated */
+    const SEQUENCE_ACTIVE = SEQUENCE.map(function (el, idx, arr) {
+        return {
+            number: el,
+            activated: false
+        };
+    });
 
-    /* insert sequence of length `N_SEQUENCE_DIGITS` to `INSTRUCTION_EL` */
-    insertSequenceEl(N_SEQUENCE_DIGITS, INSTRUCTION_EL);
+    /* insert sequence of digits `SEQUENCE` to `INSTRUCTION_EL` */
+    insertSequenceEl(SEQUENCE, INSTRUCTION_EL);
 
     /* set up the success message box without appending */
     const SUCCESS_EL = document.createElement('div');
@@ -80,10 +92,11 @@ function main(evnt) {
  * sentence in element `parentNode`.
  * @param nSequenceDigits : Number = # digits for the sequence
  * @param parentNode : Node = element to add the sequence to
+ * @param sequence : Array = digits that make up the sequence
  * @return object of the string value before the sequence, the sequence,
  * and the text node after the sequence
  */
-function insertSequenceEl(nSequenceDigits, parentNode) {
+function insertSequenceEl(sequence, parentNode) {
     /* split up the text before and after the last period */
     /* text node in instruction */
     const INSTRUCTION_TEXT = parentNode.lastChild;
@@ -105,12 +118,12 @@ function insertSequenceEl(nSequenceDigits, parentNode) {
     SEQUENCE_EL.classList.add('sequence');
 
     /* add all digits to the sequence */
-    for (let k = nSequenceDigits; (k > 0); --k) {
+    for (const DIGIT of sequence) {
         const DIGIT_EL = document.createElement('span');
-        const DIGIT_TEXT = document.createTextNode(`${k}`);
+        const DIGIT_TEXT = document.createTextNode(`${DIGIT}`);
         DIGIT_EL.appendChild(DIGIT_TEXT);
         SEQUENCE_EL.appendChild(DIGIT_EL);
-    } /* end for (let k = nSequenceDigits; (k > 0); --k) */
+    } /* end for (const DIGIT of SEQUENCE) */
 
     /* append the sequence */
     parentNode.appendChild(SEQUENCE_EL);
