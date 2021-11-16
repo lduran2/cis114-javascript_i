@@ -8,7 +8,7 @@
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
  * Version   : 1.0.2
- * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/styles/events.css
+ * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/styles/captcha.css
  *
  * CHANGELOG :
  *     v1.0.2 - 2021-11-15t21:09
@@ -23,11 +23,11 @@
  *         style the sequence
  */
 
-#sequence, #sequence span {
+.sequence, .sequence span {
 	border: 2px solid;
 }
 
-#sequence {
+.sequence {
 	font-weight: bold;
 	font-size: 1.5em;
 	font-family: 'Courier New', courier, 'Lucida Typewriter', 'Lucida Console', monospace;
@@ -35,7 +35,7 @@
 	border-right: none;
 }
 
-#sequence span {
+.sequence span {
 	border-style: none;
 	border-right: solid;
 	padding: 0 0.25em;
