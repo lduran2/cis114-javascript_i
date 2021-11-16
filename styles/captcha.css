@@ -1,0 +1,33 @@
+@charset "utf-8";
+/**
+ * /styles/captcha.css
+ * Styles used `w9lab-events` "Events Lab - CAPTCHA".
+ *
+ * By        : Leomar Duran <https://github.com/lduran2>
+ * When      : 2021-11-15t20:37
+ * Where     : Community College of Philadelphia
+ * For       : CIS 114/JavaScript I
+ * Version   : 1.0.0
+ * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/styles/events.css
+ *
+ * CHANGELOG :
+ *     v1.0.0 - 2021-11-15t20:37
+ *         style the sequence
+ */
+
+#sequence, #sequence span {
+	border: 2px solid;
+}
+
+#sequence {
+	font-weight: bold;
+	font-family: 'Courier New', courier, 'Lucida Typewriter', 'Lucida Console', monospace;
+	background: rgb(255, 255, 127);
+	border-right: none;
+}
+
+#sequence span {
+	border-style: none;
+	border-right: solid;
+	padding: 0 0.25em;
+}
