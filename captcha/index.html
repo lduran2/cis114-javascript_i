@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <title>Events Labs - CAPTCHA</title>
+    <meta name='description' content='A rudimentary CAPTCHA using a random digit triplet.' />
+  </head>
+  <body>
+    <h1>CAPTCHA</h1>
+    <!-- display the sequence of tiles to click -->
+    <p>Please click on the numbers <span id='sequence'></span></p>
+
+    <!-- the captcha puzzle -->
+    <ul id='puzzle'>
+      <!-- 10 tiles for digits 0-9 -->
+      <li><span></span></li>
+      <li><span></span></li>
+      <li><span></span></li>
+      <li><span></span></li>
+      <li><span></span></li>
+      <li><span></span></li>
+      <li><span></span></li>
+      <li><span></span></li>
+      <li><span></span></li>
+      <li><span></span></li>
+    </ul>
+
+    <!--
+      the message whether the user successfully solved the captcha
+      puzzle or clicked an incorrect tile
+      -->
+    <div id='success-message'></div>
+  </body>
+</html>
