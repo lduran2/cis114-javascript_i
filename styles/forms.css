@@ -1,16 +1,19 @@
 @charset "utf-8";
 /**
- * /styles/captcha.css
+ * /styles/forms.css
  * Styles used `w10hw-forms` "Concepts Assignment - Forms".
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-11-19t02:40
+ * When      : 2021-11-19t03:22
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.0.0
+ * Version   : 1.1.0
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/styles/captcha.css
  *
  * CHANGELOG :
+ *     v1.1.0 - 2021-11-19t03:22
+ *         hide the story element, show when submitted
+ *
  *     v1.0.0 - 2021-11-19t02:40
  *         styled both forms
  */
@@ -67,6 +70,16 @@ input[type='text'], input[type='number'] {
 #profile input[type='submit'] {
 	display: block;
 	margin: auto;
+}
+
+#story {
+	position: absolute;
+	display: none;
+}
+
+.submitted #story {
+	position: static;
+	display: block;
 }
 
 /**
