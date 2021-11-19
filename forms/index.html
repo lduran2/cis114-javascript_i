@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <title>Concepts Assignment - Forms</title>
+    <meta name='description' content='Concepts exploring the basics of forms.' />
+  </head>
+  <body>
+    <h1>Concepts Assignment - Forms</h1>
+    <form id='profile'>
+      <header>
+        <h2>Profile data</h2>
+      </header>
+      <ol>
+        <li><label for='first-name'>First name</label><input type='text' id='first-name' name='first-name' placeholder='Enter your given name.' /></li>
+        <li><label for='last-name'>Last name</label><input type='text' id='last-name' name='last-name' placeholder='Enter your family name.' /></li>
+        <li><label for='age'>Age [years]</label><input type='number' id='age' name='age' placeholder='Enter your age in years.' /></li>
+        <li><input type='submit' value='Update profile' /></li>
+      </ol>
+    </form>
+    <form id='calculator'>
+      <header>
+        <h2>Calculator</h2>
+      </header>
+      <ol>
+        <li><input type='number' name='augend' placeholder='augend' /></li>
+        <li><label for='addend'>+</label><input type='number' id='addend' name='addend' placeholder='addend' /></li>
+        <li><input type='submit' value='=' /></li>
+        <li><input type='number' name='sum' placeholder='sum' disabled /></li>
+      </ol>
+    </form>
+  </body>
+</html>
