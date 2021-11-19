@@ -1,0 +1,98 @@
+@charset "utf-8";
+/**
+ * /styles/captcha.css
+ * Styles used `w10hw-forms` "Concepts Assignment - Forms".
+ *
+ * By        : Leomar Duran <https://github.com/lduran2>
+ * When      : 2021-11-19t02:40
+ * Where     : Community College of Philadelphia
+ * For       : CIS 114/JavaScript I
+ * Version   : 1.0.0
+ * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/styles/captcha.css
+ *
+ * CHANGELOG :
+ *     v1.0.0 - 2021-11-19t02:40
+ *         styled both forms
+ */
+
+/**
+ * main content
+ */
+
+body {
+	font-family: "Helvetica Neue", helvetica, arial, sans-serif;
+	margin: auto;
+	max-width: 44em;
+	min-width: 2px;
+}
+
+form ol, form li {
+	list-style: none;
+	margin-left: 0;
+	padding-left: 0;
+}
+
+form li {
+	margin: 1em 0;
+}
+
+label, input {
+	font-size: inherit;
+	padding: 0.5em 1.14%;
+}
+
+input[type='text'], input[type='number'] {
+	color: black;
+	background: rgb(224, 224, 224);
+	border: none;
+}
+
+/**
+ * profile data form
+ */
+
+#profile label {
+	float: left;
+	width: 30%;
+}
+
+#profile label::after {
+	content: ':';
+}
+
+#profile input {
+	width: 65.44%;
+}
+
+#profile input[type='submit'] {
+	display: block;
+	margin: auto;
+}
+
+/**
+ * calculator form
+ */
+
+#calculator p {
+	padding: 0.25em 0.57% 0;
+}
+
+#calculator input, #calculator label {
+	float: left;
+	text-align: center;
+	margin: 0 0.57%;
+}
+
+#calculator .operator {
+	display: block;
+	padding: 0.5em 0;
+}
+
+#calculator input[type='submit'] {
+	margin-top: -0.25em;
+}
+
+#calculator input[disabled] {
+	color: black;
+	background: white;
+}

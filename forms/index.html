@@ -4,9 +4,11 @@
     <meta charset='utf-8' />
     <title>Concepts Assignment - Forms</title>
     <meta name='description' content='Concepts exploring the basics of forms.' />
+    <link rel='stylesheet' href='../styles/forms.css' />
   </head>
   <body>
     <h1>Concepts Assignment - Forms</h1>
+
     <form id='profile'>
       <header>
         <h2>Profile data</h2>
@@ -18,16 +20,17 @@
         <li><input type='submit' value='Update profile' /></li>
       </ol>
     </form>
+
     <form id='calculator'>
       <header>
         <h2>Calculator</h2>
       </header>
-      <ol>
-        <li><input type='number' name='augend' placeholder='augend' /></li>
-        <li><label for='addend'>+</label><input type='number' id='addend' name='addend' placeholder='addend' /></li>
-        <li><input type='submit' value='=' /></li>
-        <li><input type='number' name='sum' placeholder='sum' disabled /></li>
-      </ol>
+      <p>
+        <input type='number' name='augend' placeholder='augend' />
+        <label for='addend'>+</label><input type='number' id='addend' name='addend' placeholder='addend' />
+        <input type='submit' value='=' />
+        <input type='number' name='sum' placeholder='sum' disabled /><span class='operator'>.</span>
+      </p>
     </form>
   </body>
 </html>
