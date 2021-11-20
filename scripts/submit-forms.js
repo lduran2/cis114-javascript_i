@@ -1,15 +1,19 @@
 /**
  * /scripts/submit-forms.js
- * Sets up the captcha puzzle using DOM, including the event handlers.
+ * Sets up the submit event for the profile data and calculator forms,
+ * and adds story elements to the profile data.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-11-19t22:17
+ * When      : 2021-11-19t22:54
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.1.1
- * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/scripts/captcha.js
+ * Version   : 1.2.0
+ * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/scripts/submit-forms.js
  *
  * CHANGELOG :
+ *     v1.2.0 - 2021-11-19t22:54
+ *         calculator form calculates sum on submit
+ *
  *     v1.1.1 - 2021-11-19t22:17
  *         profile form now updates profile on submit
  *
@@ -31,17 +35,20 @@ function main(evnt) {
     const BODY_EL = document.querySelector('body');
     if (!BODY_EL) {
         return;
-    } /* if (!BODY_EL) */
+    } /* end if (!BODY_EL) */
 
     /* set up the profile data form */
     setUpProfileData(BODY_EL);
+
+    /* set up the calculator form */
+    setUpCalculator(BODY_EL);
 
     /* finish */
     console.log('Done.');
 } /* end function main(evnt) */
 
 /**
- * Sets up the profile data form and adds its form submission handlers.
+ * Sets up the profile data form and adds its form submission handler.
  * @param node : Node = to search for the profile element
  * @return array of the dynamic story text nodes
  */
@@ -50,7 +57,7 @@ function setUpProfileData(node) {
     const PROFILE_EL = node.querySelector('#profile');
     if (!PROFILE_EL) {
         return;
-    } /* if (!PROFILE_EL) */
+    } /* end if (!PROFILE_EL) */
 
     /* set up and store the story elements */
     const DYNAMIC_TEXTS = setStoryElement(PROFILE_EL);
@@ -59,6 +66,22 @@ function setUpProfileData(node) {
     const UPDATE_PROFILE = createUpdateProfile(DYNAMIC_TEXTS);
     PROFILE_EL.addEventListener('submit', UPDATE_PROFILE);
 } /* end function setUpProfileData(node) */
+
+/**
+ * Adds form submission handler to the calculator.
+ * @param node : Node = to search for the calculator element
+ * @return array of the dynamic story text nodes
+ */
+function setUpCalculator(node) {
+    /* get and check the calculator form */
+    const CALCULATOR_EL = node.querySelector('#calculator');
+    if (!CALCULATOR_EL) {
+        return;
+    } /* end if (!CALCULATOR_EL) */
+
+    /* add calculate to the calculator submit event */
+    CALCULATOR_EL.addEventListener('submit', calculate);
+} /* end function setUpCalculator(node) */
 
 /**
  * Sets up the story elements for the profile data form.
@@ -79,8 +102,7 @@ function setStoryElement(node) {
 
     /* while appending each next text node */
     for (let k = 0, n_parts = STORY_PARTS.length;
-            appendingNextText(STORY_PARTS, n_parts, k, STORY_EL);
-            ++k)
+        appendingNextText(STORY_PARTS, n_parts, k, STORY_EL); ++k)
     {
         /* fetch the field name */
         const FIELD_NAME = node.elements[k].getAttribute('name');
@@ -104,17 +126,18 @@ function setStoryElement(node) {
 } /* end function setStoryElement(node) */
 
 /**
- * Creates an event listener with access to dynamicText.
+ * Creates an event listener with access to dynamicText, that updates
+ * the text nodes with the data from the event target form.
  * @param dynamicText : Array = text nodes to update
  */
 function createUpdateProfile(dynamicTexts) {
     return function (evnt) {
-        /* respond on client side */
-        evnt.preventDefault();
         /* log the event */
         console.log('createUpdateProfile(dynamicTexts)(evnt)');
         console.log('dynamicTexts:', dynamicTexts);
         console.log('evnt:', evnt);
+        /* respond on client side */
+        evnt.preventDefault();
 
         /* get the form fields */
         const FORM = evnt.target;
@@ -128,7 +151,32 @@ function createUpdateProfile(dynamicTexts) {
         /* mark the form as submitted */
         FORM.classList.add('submitted');
     } /* return function (evnt) */
-} /* function createUpdateProfile(dynamicTexts) */
+} /* end function createUpdateProfile(dynamicTexts) */
+
+/**
+ * Calculates the sum of the field values in the event target form.
+ */
+function calculate(evnt) {
+    /* log the event */
+    console.log('calculate(evnt)');
+    console.log('evnt:', evnt);
+    /* respond on client side */
+    evnt.preventDefault();
+
+    /* get the form fields */
+    const FIELDS = evnt.target;
+    /* get each element */
+    const AUGEND = FIELDS.augend;
+    const ADDEND = FIELDS.addend;
+    const SUM = FIELDS.sum;
+
+    /* get the number value of the input fields */
+    const AUGEND_VALUE = Number.parseInt(AUGEND.value, 10);
+    const ADDEND_VALUE = Number.parseInt(ADDEND.value, 10);
+
+    /* add and display the value */
+    SUM.value = `${AUGEND_VALUE + ADDEND_VALUE}`;
+} /* end function calculate(evnt) */
 
 /**
  * Creates a text node from `strings[idx]` and appends it to `node`.
