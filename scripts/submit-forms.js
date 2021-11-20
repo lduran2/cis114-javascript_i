@@ -3,13 +3,16 @@
  * Sets up the captcha puzzle using DOM, including the event handlers.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-11-19t04:08
+ * When      : 2021-11-19t21:50
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.0.0
+ * Version   : 1.1.0
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/scripts/captcha.js
  *
  * CHANGELOG :
+ *     v1.1.0 - 2021-11-19t21:50
+ *         abstracted `setStoryElement`, logging profile submit
+ *
  *     v1.0.0 - 2021-11-19t04:08
  *         create and add the story element to the profile data form
  */
@@ -28,7 +31,7 @@ function main(evnt) {
     } /* if (!BODY_EL) */
 
     /* set up the profile data form */
-    setUpProfileData(evnt, BODY_EL);
+    setUpProfileData(BODY_EL);
 
     /* finish */
     console.log('Done.');
@@ -36,17 +39,30 @@ function main(evnt) {
 
 /**
  * Sets up the profile data form and adds its form submission handlers.
- * @param evnt : Event = the event that triggers this listener
  * @param node : Node = to search for the profile element
  * @return array of the dynamic story text nodes
  */
-function setUpProfileData(evnt, node) {
+function setUpProfileData(node) {
     /* get and check the profile form */
     const PROFILE_EL = node.querySelector('#profile');
     if (!PROFILE_EL) {
         return;
     } /* if (!PROFILE_EL) */
 
+    /* set up and store the story elements */
+    const DYNAMIC_TEXTS = setStoryElement(PROFILE_EL);
+
+    /* add update profile to the profile submit event */
+    const UPDATE_PROFILE = createUpdateProfile(DYNAMIC_TEXTS);
+    PROFILE_EL.addEventListener('submit', UPDATE_PROFILE);
+} /* end function setUpProfileData(node) */
+
+/**
+ * Sets up the story elements for the profile data form.
+ * @param node : Node = to which to append the story element
+ * @return array of the dynamic story text nodes
+ */
+function setStoryElement(node) {
     /* array of the static parts of the story */
     /* @ is to be replaced with the dynamic elements */
     const STORY_PARTS = 'My name is @ @ and I am @ years old.'.split('@');
@@ -75,11 +91,26 @@ function setUpProfileData(evnt, node) {
        */
 
     /* append the story element to the profile form */
-    PROFILE_EL.appendChild(STORY_EL);
+    node.appendChild(STORY_EL);
 
     /* return the array of dynamic elements */
     return DYNAMIC_TEXTS;
-} /* end function setUpProfileData(evnt) */
+} /* end function setStoryElement(node) */
+
+/**
+ * Creates an event listener with access to dynamicText.
+ * @param dynamicText : Array = text nodes to update
+ */
+function createUpdateProfile(dynamicText) {
+    return function (evnt) {
+        /* respond on client side */
+        evnt.preventDefault();
+        /* log the event */
+        console.log('createUpdateProfile(dynamicText)(evnt)');
+        console.log('dynamicText:', dynamicText);
+        console.log('evnt:', evnt);
+    } /* return function (evnt) */
+} /* function createUpdateProfile(dynamicText) */
 
 /**
  * Creates a text node from `strings[idx]` and appends it to `node`.
