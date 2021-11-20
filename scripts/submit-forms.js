@@ -3,13 +3,16 @@
  * Sets up the captcha puzzle using DOM, including the event handlers.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-11-19t21:50
+ * When      : 2021-11-19t22:17
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.1.0
+ * Version   : 1.1.1
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/scripts/captcha.js
  *
  * CHANGELOG :
+ *     v1.1.1 - 2021-11-19t22:17
+ *         profile form now updates profile on submit
+ *
  *     v1.1.0 - 2021-11-19t21:50
  *         abstracted `setStoryElement`, logging profile submit
  *
@@ -66,8 +69,6 @@ function setStoryElement(node) {
     /* array of the static parts of the story */
     /* @ is to be replaced with the dynamic elements */
     const STORY_PARTS = 'My name is @ @ and I am @ years old.'.split('@');
-    /* IDs of the dynamic elements */
-    const DYNAMIC_IDS = 'story-first-name story-last-name story-age'.split(' ');
 
     /* the story paragraph element */
     const STORY_EL = document.createElement('p');
@@ -77,17 +78,22 @@ function setStoryElement(node) {
     const DYNAMIC_TEXTS = [];
 
     /* while appending each next text node */
-    for (let k = 0; appendingNextText(STORY_PARTS, k, STORY_EL); ++k) {
+    for (let k = 0, n_parts = STORY_PARTS.length;
+            appendingNextText(STORY_PARTS, n_parts, k, STORY_EL);
+            ++k)
+    {
+        /* fetch the field name */
+        const FIELD_NAME = node.elements[k].getAttribute('name');
         /* also create and append the next dynamic element */
         const DYNAMIC_EL = document.createElement('strong');
-        const DYNAMIC_TEXT = document.createTextNode(`[${DYNAMIC_IDS[k]}]`);
-        DYNAMIC_EL.setAttribute('id', DYNAMIC_IDS[k]);
+        const DYNAMIC_TEXT = document.createTextNode(`[${FIELD_NAME}]`);
+        /* prefix FIELD_NAME with `story-` for the dynamic element ID */
+        DYNAMIC_EL.setAttribute('id', `story-${FIELD_NAME}`);
         DYNAMIC_EL.append(DYNAMIC_TEXT);
         STORY_EL.appendChild(DYNAMIC_EL);
         /* push onto dynamic text nodes stack */
         DYNAMIC_TEXTS.push(DYNAMIC_TEXT);
-    } /* end
-        for (let k = 0; appendingNextText(STORY_PARTS, k, STORY_EL); ++k)
+    } /* end for (; appendingNextText(STORY_PARTS, n_parts, k, STORY_EL); )
        */
 
     /* append the story element to the profile form */
@@ -101,16 +107,28 @@ function setStoryElement(node) {
  * Creates an event listener with access to dynamicText.
  * @param dynamicText : Array = text nodes to update
  */
-function createUpdateProfile(dynamicText) {
+function createUpdateProfile(dynamicTexts) {
     return function (evnt) {
         /* respond on client side */
         evnt.preventDefault();
         /* log the event */
-        console.log('createUpdateProfile(dynamicText)(evnt)');
-        console.log('dynamicText:', dynamicText);
+        console.log('createUpdateProfile(dynamicTexts)(evnt)');
+        console.log('dynamicTexts:', dynamicTexts);
         console.log('evnt:', evnt);
+
+        /* get the form fields */
+        const FORM = evnt.target;
+        const FIELDS = FORM.elements;
+
+        /* copy value of each field into the dynamic texts */
+        for (let k = 0, n_texts = dynamicTexts.length; (k < n_texts); ++k) {
+            dynamicTexts[k].nodeValue = FIELDS[k].value;
+        } /* end for (; (k < n_texts); ) */
+
+        /* mark the form as submitted */
+        FORM.classList.add('submitted');
     } /* return function (evnt) */
-} /* function createUpdateProfile(dynamicText) */
+} /* function createUpdateProfile(dynamicTexts) */
 
 /**
  * Creates a text node from `strings[idx]` and appends it to `node`.
@@ -119,12 +137,12 @@ function createUpdateProfile(dynamicText) {
  * @param node : Node = to which to append
  * @return true if there is a next string, false otherwise
  */
-function appendingNextText(strings, idx, node) {
+function appendingNextText(strings, len, idx, node) {
     /* create and append the text node */
     const TEXT = document.createTextNode(strings[idx]);
     node.appendChild(TEXT);
     /* return if next string */
-    return (strings.length != (idx + 1));
+    return (len != (idx + 1));
 } /* end function appendingNextText(strings, idx, node) */
 
 /* add main to the window load event */
