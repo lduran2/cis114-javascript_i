@@ -26,38 +26,13 @@
  * @param evnt : Event = the window onload event
  */
 function main(evnt) {
-    /* get and confirm the document header */
-    const HEAD_EL = document.querySelector('head');
-    if (!HEAD_EL) {
-        return;
-    } /* end if (!HEAD_EL) */
-
-    /* get and confirm the top level heading */
-    const H1_EL = document.querySelector('body h1');
-    if (!H1_EL) {
-        return;
-    } /* end if (!H1_EL) */
-
-    /* create the styler form */
-    const STYLER = createStylerForm();
-    /* insert it after H1_EL */
-    H1_EL.parentNode.insertBefore(STYLER, H1_EL.nextSibling);
-
-    /* finish */
-    console.log('Done.');
-} /* end function main(evnt) */
-
-/**
- * Creates the styler form and all its components.
- * @return the styler form
- */
-function createStylerForm() {
     /**
      * the colors defined by CSS 2.1
      * @see https://www.w3.org/TR/CSS21/syndata.html#value-def-color
      */
     const COLORS = 'maroon,red,orange,yellow,olive,purple,fuchsia,white,\
 lime,green,navy,blue,aqua,teal,black,silver,gray'.split(',');
+
     /* an array of the properties of the fields */
     const FIELD_PROPERTIES = [
         {
@@ -83,52 +58,79 @@ lime,green,navy,blue,aqua,teal,black,silver,gray'.split(',');
         }
     ];
 
-    /* function(string, object)[] */
-    /* maps the elements to their create functions */
-    const CREATE_ELS = {};
-    CREATE_ELS['select'] = createStylerSelect;
-    CREATE_ELS['input'] = createStylerInput;
+    /* get and confirm the document header */
+    const HEAD_EL = document.querySelector('head');
+    if (!HEAD_EL) {
+        return;
+    } /* end if (!HEAD_EL) */
 
-    /* create the form container */
-    const FORM_EL = document.createElement('form');
-    FORM_EL.classList.add('styler');
+    /* get and confirm the top level heading */
+    const H1_EL = document.querySelector('body h1');
+    if (!H1_EL) {
+        return;
+    } /* end if (!H1_EL) */
 
-    /* create its heading */
+    /* create the styler form */
+    const STYLER = createForm(FIELD_PROPERTIES);
+
+    /* add its header */
     const HEADER_EL = document.createElement('header');
     const H2_EL = document.createElement('h2');
     const H2_TEXT = document.createTextNode('Customize this page');
     H2_EL.appendChild(H2_TEXT);
     HEADER_EL.appendChild(H2_EL);
-    FORM_EL.appendChild(HEADER_EL);
+    STYLER.insertBefore(HEADER_EL, STYLER.firstChild);
+
+    /* insert it after H1_EL */
+    H1_EL.parentNode.insertBefore(STYLER, H1_EL.nextSibling);
+
+    /* finish */
+    console.log('Done.');
+} /* end function main(evnt) */
+
+/**
+ * Creates a new form and all its components.
+ * @return the new form
+ */
+function createForm(fieldProperties) {
+    /* function(string, object)[] */
+    /* maps the elements to their create functions */
+    const CREATE_ELS = {};
+    CREATE_ELS['select'] = createSelect;
+    CREATE_ELS['input'] = createInput;
+
+    /* create the form container */
+    const FORM_EL = document.createElement('form');
+    FORM_EL.classList.add('styler');
 
     /* the ordered list of form fields */
     const OL_EL = document.createElement('ol');
 
     /* loop through the field properties */
-    for (const FIELD_PROPERTY of FIELD_PROPERTIES) {
-        appendStylerItem(
+    for (const FIELD_PROPERTY of fieldProperties) {
+        appendFormListItem(
             CREATE_ELS[FIELD_PROPERTY.element],
             FIELD_PROPERTY,
             OL_EL
         );
-    } /* end for (const FIELD_PROPERTY of FIELD_PROPERTIES) */
+    } /* end for (const FIELD_PROPERTY of fieldProperties) */
 
     /* append the list to the form */
     FORM_EL.appendChild(OL_EL);
 
     /* return the form element */
     return FORM_EL;
-} /* end function createStylerForm() */
+} /* end function createForm() */
 
 /**
- * Appends a list item to the given styler form list element.
+ * Appends a form list item to the given node.
  * @param createElFunc : function(string, object) = the function to create the field
  *     contained in this list item
  * @param fieldProperty : object = the field's property object
- * @param olEl : Node = to which to append
- * @return the styler form list item
+ * @param parentNode : Node = to which to append
+ * @return the new list item
  */
-function appendStylerItem(createElFunc, fieldProperty, olEl) {
+function appendFormListItem(createElFunc, fieldProperty, parentNode) {
     /* get the label */
     const LABEL = fieldProperty.label;
     /* for an ID, convert a label to hyphenated format */
@@ -145,16 +147,16 @@ function appendStylerItem(createElFunc, fieldProperty, olEl) {
     /* assemble the list item and append it */
     LI_EL.appendChild(LABEL_EL);
     LI_EL.appendChild(FIELD_EL);
-    olEl.appendChild(LI_EL);
-} /* end function createStylerField(olEl, fieldProperty) */
+    parentNode.appendChild(LI_EL);
+} /* end function createField(parentNode, fieldProperty) */
 
 /**
- * Creates a select element for the styler.
+ * Creates a new select element.
  * @param id : string = the id for the select element
  * @param fieldProperty : object = the field's property object
- * @return a select element
+ * @return the new select element
  */
-function createStylerSelect(id, fieldPropety) {
+function createSelect(id, fieldPropety) {
     /* get important values from the field property */
     const VALUES = fieldPropety.values;
     const N_VALUES = fieldPropety.values.length;
@@ -181,29 +183,29 @@ function createStylerSelect(id, fieldPropety) {
     } /* end for (; (k < N_VALUES); ) */
 
     return SELECT_EL;
-} /* end function createStylerSelect(id, fieldPropety) */
+} /* end function createSelect(id, fieldPropety) */
 
 /**
  * Appends an option element to the given node.
  * @param value : string = the value and label of the option
- * @param selectEl : Node = to which to append
+ * @param parentNode : Node = to which to append
  * @return the new select element
  */
-function appendStylerOption(value, selectEl) {
+function appendOption(value, parentNode) {
     /* create an option element and text */
     const OPTION_EL = document.createElement('option');
     OPTION_EL.setAttribute('value', value);
     const OPTION_TEXT = document.createTextNode(value);
     /* assemble and append the select element */
     OPTION_EL.appendChild(OPTION_TEXT);
-    selectEl.appendChild(OPTION_EL);
+    parentNode.appendChild(OPTION_EL);
     return OPTION_EL;
-} /* end function appendStylerOption(value, selectEl) */
+} /* end function appendOption(value, parentNode) */
 
-function createStylerInput(id, fieldPropety) {
+function createInput(id, fieldPropety) {
     /* placeholder */
     return document.createTextNode('');
-} /* end function createStylerInput(id, fieldPropety) */
+} /* end function createInput(id, fieldPropety) */
 
 /* add main listener to the window load event */
 document.addEventListener('DOMContentLoaded', main);
