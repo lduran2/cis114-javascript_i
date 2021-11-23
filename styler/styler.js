@@ -3,13 +3,16 @@
  * Creates an applet to customize the look and feel of an article.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-11-22t21:30
+ * When      : 2021-11-22t21:46
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.0.4
+ * Version   : 1.0.5
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/styler/styler.js
  *
  * CHANGELOG :
+ *     v1.0.5 - 2021-11-22t21:46
+ *         creating the `select` elements
+ *
  *     v1.0.4 - 2021-11-22t21:30
  *         fixed `appendStylerOption` -> `appendOption` in `createSelect`
  *
@@ -17,7 +20,7 @@
  *         generalized form creation
  *
  *     v1.0.2 - 2021-11-22t21:20
- *         creating the select elements
+ *         creating the `select` elements
  *
  *     v1.0.1 - 2021-11-22t20:05
  *         create the form with only labels
@@ -32,8 +35,22 @@
  * @param evnt : Event = the window onload event
  */
 function main(evnt) {
+    /* get and confirm the document header */
+    const HEAD_EL = document.querySelector('head');
+    if (!HEAD_EL) {
+        return;
+    } /* end if (!HEAD_EL) */
+
+    /* get and confirm the top level heading */
+    const H1_EL = document.querySelector('body h1');
+    if (!H1_EL) {
+        return;
+    } /* end if (!H1_EL) */
+
+    /* first define the parameter constants */
     /**
      * the colors defined by CSS 2.1
+     * used in the form field properties below
      * @see https://www.w3.org/TR/CSS21/syndata.html#value-def-color
      */
     const COLORS = 'maroon,red,orange,yellow,olive,purple,fuchsia,white,\
@@ -61,20 +78,15 @@ lime,green,navy,blue,aqua,teal,black,silver,gray'.split(',');
             type: 'number',
             values: [ '16' ],
             selected: 0
+        },
+        {
+            label: '',
+            element: 'input',
+            type: 'submit',
+            values: [ 'submit' ],
+            selected: 0
         }
     ];
-
-    /* get and confirm the document header */
-    const HEAD_EL = document.querySelector('head');
-    if (!HEAD_EL) {
-        return;
-    } /* end if (!HEAD_EL) */
-
-    /* get and confirm the top level heading */
-    const H1_EL = document.querySelector('body h1');
-    if (!H1_EL) {
-        return;
-    } /* end if (!H1_EL) */
 
     /* create the styler form */
     const STYLER = createForm(FIELD_PROPERTIES);
@@ -129,26 +141,26 @@ function createForm(fieldProperties) {
 
 /**
  * Appends a form list item to the given node.
- * @param createElFunc : function(string, object) = the function to create the field
+ * @param createFunc : function(string, object) = the function to create the field
  *     contained in this list item
  * @param fieldProperty : object = the field's property object
  * @param parentNode : Node = to which to append
  * @return the new list item
  */
-function appendFormListItem(createElFunc, fieldProperty, parentNode) {
+function appendFormListItem(createFunc, fieldProperty, parentNode) {
     /* get the label */
     const LABEL = fieldProperty.label;
     /* for an ID, convert a label to hyphenated format */
     const ID = LABEL.toLowerCase().replaceAll(' ', '-');
     /* create the list item element */
     const LI_EL = document.createElement('li');
+    /* create the form element */
+    const FIELD_EL = createFunc(ID, fieldProperty);
     /* create the label element */
     const LABEL_EL = document.createElement('label');
     LABEL_EL.setAttribute('for', ID);
     const LABEL_TEXT = document.createTextNode(LABEL);
     LABEL_EL.appendChild(LABEL_TEXT);
-    /* create the form element */
-    const FIELD_EL = createElFunc(ID, fieldProperty);
     /* assemble the list item and append it */
     LI_EL.appendChild(LABEL_EL);
     LI_EL.appendChild(FIELD_EL);
@@ -161,11 +173,11 @@ function appendFormListItem(createElFunc, fieldProperty, parentNode) {
  * @param fieldProperty : object = the field's property object
  * @return the new select element
  */
-function createSelect(id, fieldPropety) {
+function createSelect(id, fieldProperty) {
     /* get important values from the field property */
-    const VALUES = fieldPropety.values;
-    const N_VALUES = fieldPropety.values.length;
-    const SELECTED = fieldPropety.selected;
+    const VALUES = fieldProperty.values;
+    const N_VALUES = fieldProperty.values.length;
+    const SELECTED = fieldProperty.selected;
 
     /* create the select element */
     const SELECT_EL = document.createElement('select');
@@ -188,7 +200,7 @@ function createSelect(id, fieldPropety) {
     } /* end for (; (k < N_VALUES); ) */
 
     return SELECT_EL;
-} /* end function createSelect(id, fieldPropety) */
+} /* end function createSelect(id, fieldProperty) */
 
 /**
  * Appends an option element to the given node.
@@ -207,10 +219,16 @@ function appendOption(value, parentNode) {
     return OPTION_EL;
 } /* end function appendOption(value, parentNode) */
 
-function createInput(id, fieldPropety) {
-    /* placeholder */
-    return document.createTextNode('');
-} /* end function createInput(id, fieldPropety) */
+function createInput(id, fieldProperty) {
+    /* create the input field */
+    const INPUT_EL = document.createElement('input');
+    INPUT_EL.setAttribute('type', fieldProperty.type);
+    INPUT_EL.setAttribute('id', id);
+    INPUT_EL.setAttribute('name', id);
+    /* inputs only have 1 value (the 1st) */
+    INPUT_EL.setAttribute('value', fieldProperty.values[0]);
+    return INPUT_EL;
+} /* end function createInput(id, fieldProperty) */
 
 /* add main listener to the window load event */
 document.addEventListener('DOMContentLoaded', main);
