@@ -3,13 +3,16 @@
  * Creates an applet to customize the look and feel of an article.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-11-22t23:11
+ * When      : 2021-11-22t23:38
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.1.0
+ * Version   : 1.1.1
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/styler/styler.js
  *
  * CHANGELOG :
+ *     v1.1.1 - 2021-11-22t23:38
+ *         added the default stylesheet
+ *
  *     v1.1.0 - 2021-11-22t23:11
  *         added the styler stylesheet, current box
  *
@@ -98,8 +101,20 @@ lime,green,navy,blue,aqua,teal,black,silver,gray'.split(',');
         ]
     };
 
+    /* the format for the dynamic style */
+    /* {} will be replaced by values */
+    const DYNAMIC_STYLE = `
+body {
+    color: {};
+    background-color: {};
+    font-size: {}pt;
+}
+`.split('{}');
+
     /* create the styler form */
     const STYLER = createForm(FIELD_PROPERTIES);
+    /* make the form POST request */
+    STYLER.setAttribute('method', 'post');
     /* add the styler class */
     STYLER.classList.add('styler');
 
@@ -123,12 +138,21 @@ lime,green,navy,blue,aqua,teal,black,silver,gray'.split(',');
     STYLE_LINK_EL.setAttribute('href', 'styler.css');
     HEAD_EL.appendChild(STYLE_LINK_EL);
 
+    /* create the default stylesheet */
+    const DEFAULTS = fieldPropertiesDefaults(FIELD_PROPERTIES.labeled);
+    const STYLE = joinOuterInnerArrays(DYNAMIC_STYLE, DEFAULTS).join('');
+    const STYLE_TEXT = document.createTextNode(STYLE);
+    const STYLE_EL = document.createElement('style');
+    STYLE_EL.appendChild(STYLE_TEXT);
+    HEAD_EL.appendChild(STYLE_EL);
+
     /* finish */
     console.log('Done.');
 } /* end function main(evnt) */
 
 /**
  * Creates a new form and all its components.
+ * @param fieldProperties : Array = properties of fields in the form
  * @return the new form
  */
 function createForm(fieldProperties) {
@@ -173,7 +197,7 @@ function createForm(fieldProperties) {
  * Appends a form list item to the given node with a matching label.
  * @param createFunc : function(object) = the function to create the field
  *     contained in this list item
- * @param fieldProperty : object = the field's property object
+ * @param fieldProperty : Array = the field's property object
  * @param parentNode : Node = to which to append
  * @return the new list item
  */
@@ -324,6 +348,44 @@ function createCurrentBox(labeledProperties, parentNode) {
     parentNode.appendChild(DIV_EL);
 
     return VALUE_TEXTS
+}
+
+/**
+ * Finds the default values in a set of field properties.
+ * @param fieldProperties : Array = properties of fields to query
+ * @return an array of the default values
+ */
+function fieldPropertiesDefaults(fieldProperties) {
+    /* holds the defaults found so far */
+    const DEFAULTS = [];
+    /* loop through all the field properties */
+    for (const FIELD_PROPERTY of fieldProperties) {
+        /* push on the selected value */
+        DEFAULTS.push(FIELD_PROPERTY.values[FIELD_PROPERTY.selected]);
+    } /* end for (const FIELD_PROPERTY of fieldProperties) */
+    return DEFAULTS;
+} /* function fieldPropertiesDefaults(fieldProperties) */
+
+function joinOuterInnerArrays(outer, inner) {
+    /* the new array */
+    const ARRAY = [];
+
+    /* while pushing each element of the outer array */
+    for (let k = 0, outer_len = outer.length;
+        pushingNextElement(outer, outer_len, k, ARRAY); ++k)
+    {
+        /* push the next element from the inner array */
+        ARRAY.push(inner[k]);
+    } /* end for pushingNextElement(outer, outer_len, k, ARRAY); ) */
+
+    return ARRAY;
+}
+
+function pushingNextElement(src, src_len, idx, dest) {
+    /* push from the source to the destination */
+    dest.push(src[idx]);
+    /* return if next element */
+    return ((idx + 1) != src_len);
 }
 
 /* add main listener to the window load event */
