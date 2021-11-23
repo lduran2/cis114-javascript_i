@@ -3,13 +3,19 @@
  * Creates an applet to customize the look and feel of an article.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-11-22t21:20
+ * When      : 2021-11-22t21:30
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.0.2
+ * Version   : 1.0.4
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/styler/styler.js
  *
  * CHANGELOG :
+ *     v1.0.4 - 2021-11-22t21:30
+ *         fixed `appendStylerOption` -> `appendOption` in `createSelect`
+ *
+ *     v1.0.3 - 2021-11-22t21:28
+ *         generalized form creation
+ *
  *     v1.0.2 - 2021-11-22t21:20
  *         creating the select elements
  *
@@ -101,7 +107,6 @@ function createForm(fieldProperties) {
 
     /* create the form container */
     const FORM_EL = document.createElement('form');
-    FORM_EL.classList.add('styler');
 
     /* the ordered list of form fields */
     const OL_EL = document.createElement('ol');
@@ -169,17 +174,17 @@ function createSelect(id, fieldPropety) {
 
     /* append all options before SELECTED */
     for (let k = 0; (k < SELECTED); ++k) {
-        appendStylerOption(VALUES[k], SELECT_EL);
+        appendOption(VALUES[k], SELECT_EL);
     } /* end for (; (k < SELECTED); ) */
 
     /* append the SELECTED */
-    const SELECTED_EL = appendStylerOption(VALUES[SELECTED], SELECT_EL);
+    const SELECTED_EL = appendOption(VALUES[SELECTED], SELECT_EL);
     /* select it */
     SELECTED_EL.setAttribute('selected', 'selected');
 
     /* append all options after SELECTED */
     for (let k = (SELECTED + 1); (k < N_VALUES); ++k) {
-        appendStylerOption(VALUES[k], SELECT_EL);
+        appendOption(VALUES[k], SELECT_EL);
     } /* end for (; (k < N_VALUES); ) */
 
     return SELECT_EL;
