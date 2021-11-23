@@ -1,0 +1,55 @@
+@charset "utf-8";
+/**
+ * /styler/styler.css
+ * Stylesheet for the 
+ *
+ * By        : Leomar Duran <https://github.com/lduran2>
+ * When      : 2021-11-22t23:11
+ * Where     : Community College of Philadelphia
+ * For       : CIS 114/JavaScript I
+ * Version   : 1.0.0
+ * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/styler/styler.css
+ *
+ *     v1.0.0 - 2021-11-22t23:11
+ *         styled the syler form
+ */
+
+.styler header ~ * {
+	float: left;
+	width: 50%;
+}
+
+.styler ol, .styler li {
+	list-style: none;
+	margin: 0;
+	padding-left: 0;
+}
+
+.styler ol {
+	margin-bottom: 1em;
+}
+
+.styler label, .styler input, .styler select, .styler span {
+	width: 25%;
+}
+
+.styler label {
+	float: left;
+}
+
+.styler label::after {
+	content: ':';
+}
+
+.styler input[type='submit'] {
+	display: block;
+	margin: auto;
+}
+
+.styler p {
+	margin: 0;
+}
+
+.styler + * {
+	clear: left;
+}

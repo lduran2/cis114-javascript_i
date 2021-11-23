@@ -3,13 +3,16 @@
  * Creates an applet to customize the look and feel of an article.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-11-22t22:32
+ * When      : 2021-11-22t23:11
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.0.6
+ * Version   : 1.1.0
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/styler/styler.js
  *
  * CHANGELOG :
+ *     v1.1.0 - 2021-11-22t23:11
+ *         added the styler stylesheet, current box
+ *
  *     v1.0.6 - 2021-11-22t22:32
  *         separated labeled and unlabeled elements to fix null ID
  *
@@ -61,7 +64,7 @@ lime,green,navy,blue,aqua,teal,black,silver,gray'.split(',');
 
     /* an array of the properties of the fields */
     const FIELD_PROPERTIES = {
-        labeleds: [
+        labeled: [
             {
                 label: 'Font Color',
                 element: 'select',
@@ -97,6 +100,8 @@ lime,green,navy,blue,aqua,teal,black,silver,gray'.split(',');
 
     /* create the styler form */
     const STYLER = createForm(FIELD_PROPERTIES);
+    /* add the styler class */
+    STYLER.classList.add('styler');
 
     /* add the form's header */
     const HEADER_EL = document.createElement('header');
@@ -106,9 +111,17 @@ lime,green,navy,blue,aqua,teal,black,silver,gray'.split(',');
     HEADER_EL.appendChild(H2_EL);
     STYLER.insertBefore(HEADER_EL, STYLER.firstChild);
 
+    const VALUE_TEXTS = createCurrentBox(FIELD_PROPERTIES.labeled, STYLER);
+
     /* insert the form after H1_EL */
     H1_EL.parentNode.insertBefore(STYLER, H1_EL.nextSibling);
-    alert(document.querySelector(':root').outerHTML);
+
+    /* create the stylesheet link and append it */
+    /* these are static styles */
+    const STYLE_LINK_EL = document.createElement('link');
+    STYLE_LINK_EL.setAttribute('rel', 'stylesheet');
+    STYLE_LINK_EL.setAttribute('href', 'styler.css');
+    HEAD_EL.appendChild(STYLE_LINK_EL);
 
     /* finish */
     console.log('Done.');
@@ -132,22 +145,22 @@ function createForm(fieldProperties) {
     const OL_EL = document.createElement('ol');
 
     /* loop through the labeled field properties */
-    for (const FIELD_PROPERTY of fieldProperties.labeleds) {
+    for (const LABELED_PROPERTY of fieldProperties.labeled) {
         appendLabeledListItem(
-            CREATE_ELS[FIELD_PROPERTY.element],
-            FIELD_PROPERTY,
+            CREATE_ELS[LABELED_PROPERTY.element],
+            LABELED_PROPERTY,
             OL_EL
         );
-    } /* end for (const FIELD_PROPERTY of fieldProperties) */
+    } /* end for (const LABELED_PROPERTY of fieldProperties.labeled) */
 
     /* loop through the button field properties */
-    for (const FIELD_PROPERTY of fieldProperties.buttons) {
+    for (const BUTTON_PROPERTY of fieldProperties.buttons) {
         appendFormListItem(
-            CREATE_ELS[FIELD_PROPERTY.element],
-            FIELD_PROPERTY,
+            CREATE_ELS[BUTTON_PROPERTY.element],
+            BUTTON_PROPERTY,
             OL_EL
         );
-    } /* end for (const FIELD_PROPERTY of fieldProperties) */
+    } /* end for (const BUTTON_PROPERTY of fieldProperties.buttons) */
 
     /* append the list to the form */
     FORM_EL.appendChild(OL_EL);
@@ -278,6 +291,40 @@ function createInput(fieldProperty) {
     INPUT_EL.setAttribute('value', fieldProperty.values[0]);
     return INPUT_EL;
 } /* end function createInput(fieldProperty) */
+
+function createCurrentBox(labeledProperties, parentNode) {
+    /* for storing the value texts */
+    const VALUE_TEXTS = [];
+
+    /* create the current box */
+    const DIV_EL = document.createElement('div');
+    DIV_EL.classList.add('current-box');
+
+    /* loop through the labeled field properties */
+    for (const LABELED_PROPERTY of labeledProperties) {
+        /* the label for the paragraph */
+        const LABEL = ['Current ', LABELED_PROPERTY.label, ':'].join('');
+        /* create the paragraph and both text nodes */
+        const P_EL = document.createElement('p');
+        const LABEL_EL = document.createElement('span');
+        const LABEL_TEXT = document.createTextNode(LABEL);
+        const VALUE_EL = document.createElement('span');
+        const VALUE_TEXT = document.createTextNode('');
+        /* assemble the paragraph and add it to the div */
+        LABEL_EL.appendChild(LABEL_TEXT);
+        VALUE_EL.appendChild(VALUE_TEXT);
+        P_EL.appendChild(LABEL_EL);
+        P_EL.appendChild(VALUE_EL);
+        DIV_EL.appendChild(P_EL);
+        /* add the value text to the array */
+        VALUE_TEXTS.push(VALUE_TEXT);
+    } /* end for (const LABELED_PROPERTY of labeledProperties) */
+
+    /* append the current box to the form */
+    parentNode.appendChild(DIV_EL);
+
+    return VALUE_TEXTS
+}
 
 /* add main listener to the window load event */
 document.addEventListener('DOMContentLoaded', main);
