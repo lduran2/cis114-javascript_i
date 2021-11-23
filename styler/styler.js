@@ -3,13 +3,16 @@
  * Creates an applet to customize the look and feel of an article.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-11-22t23:38
+ * When      : 2021-11-22t23:57
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.1.1
+ * Version   : 1.2.0
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/styler/styler.js
  *
  * CHANGELOG :
+ *     v1.2.0 - 2021-11-22t23:57
+ *         implemented the event handler
+ *
  *     v1.1.1 - 2021-11-22t23:38
  *         added the default stylesheet
  *
@@ -126,6 +129,7 @@ body {
     HEADER_EL.appendChild(H2_EL);
     STYLER.insertBefore(HEADER_EL, STYLER.firstChild);
 
+    /* get the text nodes of current box */
     const VALUE_TEXTS = createCurrentBox(FIELD_PROPERTIES.labeled, STYLER);
 
     /* insert the form after H1_EL */
@@ -140,11 +144,15 @@ body {
 
     /* create the default stylesheet */
     const DEFAULTS = fieldPropertiesDefaults(FIELD_PROPERTIES.labeled);
-    const STYLE = joinOuterInnerArrays(DYNAMIC_STYLE, DEFAULTS).join('');
+    const STYLE = dovetail(DYNAMIC_STYLE, DEFAULTS).join('');
     const STYLE_TEXT = document.createTextNode(STYLE);
     const STYLE_EL = document.createElement('style');
     STYLE_EL.appendChild(STYLE_TEXT);
     HEAD_EL.appendChild(STYLE_EL);
+
+    /* add the event handler */
+    const STYLER_SUBMIT = createStylerSubmit(STYLER, VALUE_TEXTS, DYNAMIC_STYLE, STYLE_TEXT);
+    STYLER.addEventListener('submit', STYLER_SUBMIT);
 
     /* finish */
     console.log('Done.');
@@ -364,9 +372,16 @@ function fieldPropertiesDefaults(fieldProperties) {
         DEFAULTS.push(FIELD_PROPERTY.values[FIELD_PROPERTY.selected]);
     } /* end for (const FIELD_PROPERTY of fieldProperties) */
     return DEFAULTS;
-} /* function fieldPropertiesDefaults(fieldProperties) */
+} /* end function fieldPropertiesDefaults(fieldProperties) */
 
-function joinOuterInnerArrays(outer, inner) {
+/**
+ * Joins two arrays so that the inner array's elements are between
+ * those of the outer array.
+ * @param outer : Array
+ * @param inner : Array
+ * @return the joined array
+ */
+function dovetail(outer, inner) {
     /* the new array */
     const ARRAY = [];
 
@@ -379,14 +394,49 @@ function joinOuterInnerArrays(outer, inner) {
     } /* end for pushingNextElement(outer, outer_len, k, ARRAY); ) */
 
     return ARRAY;
-}
+} /* end function dovetail(outer, inner) */
 
+/**
+ * Pushes an element from `src` to `dest`.
+ * @param src : Array = the source array
+ * @param src_len : int = length of the source array
+ * @param idx : int = index of the element in `src`
+ * @param dest : Array = the destination array
+ */
 function pushingNextElement(src, src_len, idx, dest) {
     /* push from the source to the destination */
     dest.push(src[idx]);
     /* return if next element */
     return ((idx + 1) != src_len);
-}
+} /* end function pushingNextElement(src, src_len, idx, dest) */
+
+function createStylerSubmit(formEl, valueTexts, template, styleText) {
+    return function (evnt) {
+        /* respond on client side */
+        evnt.preventDefault();
+
+        /* get the form fields */
+        const FORM = evnt.target;
+        const FIELDS = FORM.elements;
+
+        /* holds the values found so far */
+        const VALUES = [];
+        /* get the number of values */
+        const N_VALUES = valueTexts.length
+
+        /* copy value of each field into the value texts */
+        for (let k = 0; (k < N_VALUES); ++k) {
+            /* update the value texts */
+            valueTexts[k].N_VALUES = FIELDS[k].value;
+            /* push the value */
+            VALUES.push(FIELDS[k].value);
+        } /* end for (; (k < n_texts); ) */
+
+        /* create the style sheet and update the text node */
+        const STYLE = dovetail(template, VALUES).join('');
+        styleText.nodeValue = STYLE;
+    } /* function (evnt) */
+} /* function createStylerSubmit(formEl, valueTexts, template, styleText) */
 
 /* add main listener to the window load event */
 document.addEventListener('DOMContentLoaded', main);
