@@ -3,14 +3,39 @@
 
 \title{CIS 114 Final Project Proposal - UML Use Case Diagram}
 \author{Leomar Durán}
-\date{November 2021}
+\date{26 November 2021}
 
-\usepackage{tikz}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CHANGELOG :
+%     2021-11-26t16:40
+%         created actor shapes
+%
+%     2021-11-26t14:53
+%         started with an empty node
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{tikz} % for tikzpicture
+
+% The actor shape with scope or nodes
+\newcommand*\unscopedactor{%
+    \draw (0,22.5pt) circle (7.5pt);% head
+    \draw (0,15pt) -- ++(0,-25pt) -- ++(-15pt,-20pt);% body and left leg
+    \draw (-15pt,10pt) -- ++(30pt,0);% arms
+    \draw (0,-10pt) -- ++(15pt,-20pt)% right leg
+}%
+
+\newcommand*\actor[5][1]{%
+    \begin{scope}[scale=#1,xshift=#3,yshift=#4,line width=1pt]%
+        \unscopedactor;%
+    \end{scope}%
+}%
 
 \begin{document}
 
 \begin{tikzpicture}
-    \node {};
+    \actor{A}{0}{0};
+    \actor{B}{0}{-1in};
+    \actor{C}{1in}{0};
 \end{tikzpicture}
 
 \end{document}
