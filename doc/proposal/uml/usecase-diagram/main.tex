@@ -9,6 +9,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHANGELOG :
 %     2021-11-27t15:37
+%         integrated all actor loops
+%
+%     2021-11-27t15:37
 %         loop to place actors
 %         better loop variables in \actor
 %
@@ -138,12 +141,10 @@
     \\
     };
     \node[package head] at (les-fleurs-body.north west) {Les Fleurs Shop};
-% actors
     \foreach \side/\actorname/\x in {west/User/-1in,east/Administrator/1in} {
-        \node at (les-fleurs-body.\side) {};
-        \actor*\actorname\x0;
     }
 %
+    % draw each actor, its label and associations
     % \side the actor is of the use case packages
     % \Map actor--user case mappings
     \foreach \side/\Map in {%
@@ -154,21 +155,27 @@
             Administrator/{1,2,3}%
         }%
     }{
-        % \pactor port of actor from which to draw
-        % set use case port \pactor according to \side
+        % set according to \side
+        %     \pactor port of actor from which to draw
+        %     \actorx distance from the \side
         \ifx\side\echowest
             \def\pactor{east}
+            \def\actorx{-1in}
         % \ifx\side\echowest
         \else\ifx\side\echoeast
             \def\pactor{west}
+            \def\actorx{1in}
         \fi\fi % \side\echoeast
 %
         % \actorname
         % \Usecases use case set
         \foreach \actorname/\Usecases in \Map {
+% place the actor
+            \node at (les-fleurs-body.\side) {};
+            \actor*\actorname\actorx0;
 % label the actor
             \node[below=0pt of \actorname-south] {\actorname};
-% associate from the actor
+% associations from the actor
             % \usecaseno use case number
             \foreach \usecaseno in \Usecases {
                 \draw (\actorname-\pactor) -- (les-fleurs-body-\usecaseno-1.\side);
