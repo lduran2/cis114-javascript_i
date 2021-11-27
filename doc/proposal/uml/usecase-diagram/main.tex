@@ -7,6 +7,9 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHANGELOG :
+%     2021-11-26t20:25
+%         added ports to actor
+%
 %     2021-11-26t16:40
 %         created actor shapes
 %
@@ -15,6 +18,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage{tikz} % for tikzpicture
+\usetikzlibrary{positioning}
 
 % The actor shape with scope or nodes
 \newcommand*\unscopedactor{%
@@ -27,15 +31,37 @@
 \newcommand*\actor[5][1]{%
     \begin{scope}[scale=#1,xshift=#3,yshift=#4,line width=1pt]%
         \unscopedactor;%
+%
+        % create the actor ports
+        \foreach \n/\x/\y in {
+            /0/0,
+            -north/0/30pt,
+            -west/-15pt/10pt,
+            -east/15pt/10pt,
+            -south/0/-30pt
+        }
+            \coordinate (#2\n) at (\x,\y);
     \end{scope}%
 }%
 
 \begin{document}
 
 \begin{tikzpicture}
+    % actors
     \actor{A}{0}{0};
-    \actor{B}{0}{-1in};
+    \actor{B}{0}{-1.5in};
     \actor{C}{1in}{0};
+    % logos
+    \node at (A) {A};
+    \node at (B) {B};
+    \node at (C) {C};
+    % labels
+    \node[below=0pt of A-south] {actor};
+    \node[below=0pt of B-south] {band};
+    \node[below=0pt of C-south] {cowboy};
+    % relations
+    \draw (A-east) -- (C-west);
+    \draw (B-east) -- (C-west);
 \end{tikzpicture}
 
 \end{document}
