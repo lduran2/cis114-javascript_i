@@ -1,5 +1,6 @@
 \documentclass{standalone}
 \usepackage[utf8]{inputenc}
+\renewcommand*\familydefault\sfdefault
 
 \title{CIS 114 Final Project Proposal - UML Use Case Diagram}
 \author{Leomar Durán}
@@ -7,6 +8,9 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHANGELOG :
+%     2021-11-27t01:24
+%         create the package of use cases
+%
 %     2021-11-26t20:37
 %         documented \actor[5][1]
 %
@@ -22,6 +26,8 @@
 
 \usepackage{tikz} % for tikzpicture
 \usetikzlibrary{positioning}
+\usetikzlibrary{matrix}
+\usetikzlibrary{shapes}
 
 % The actor shape without scope or ports
 \newcommand*\unscopedactor{%
@@ -36,42 +42,62 @@
 % @param 2 = port name prefix
 % @param 3 = x-shift
 % @param 4 = y-shift
-% @param 5 = commands after the actor within scope
+% @param 5 = extensions after the actor within scope
 \newcommand*\actor[5][1]{%
     \begin{scope}[scale=#1,xshift=#3,yshift=#4,line width=1pt]%
         \unscopedactor;%
         % create the actor ports
-        \foreach \n/\x/\y in {
-            /0/0,
-            -north/0/30pt,
-            -west/-15pt/10pt,
-            -east/15pt/10pt,
-            -south/0/-30pt
-        }
-            \coordinate (#2\n) at (\x,\y);
+        \foreach \n/\x/\y in {%
+            /0/0,% central port
+            -north/0/30pt,%
+            -west/-15pt/10pt,%
+            -east/15pt/10pt,%
+            -south/0/-30pt%
+        }%
+            \coordinate (#2\n) at (\x,\y);%
         % \foreach \n/\x/\y
-        #5
+        #5%
     \end{scope}%
 }%
 
 \begin{document}
 
 \begin{tikzpicture}
-    % actors
-    \actor{A}{0}{0};
-    \actor{B}{0}{-1.5in};
-    \actor{C}{1in}{0};
-    % logos
-    \node at (A) {A};
-    \node at (B) {B};
-    \node at (C) {C};
-    % labels
-    \node[below=0pt of A-south] {actor};
-    \node[below=0pt of B-south] {band};
-    \node[below=0pt of C-south] {cowboy};
-    % relations
-    \draw (A-east) -- (C-west);
-    \draw (B-east) -- (C-west);
+    [%
+        package head/.style={%
+            draw,%
+            trapezium,%
+            trapezium left angle=90,%
+            anchor=bottom left corner,%
+            yshift=-0.5pt%
+        },%
+        package body/.style={%
+            draw,%
+            matrix of nodes,%
+            row sep=10pt,%
+            every node/.style={use case},%
+        },%
+        use case/.style={%
+            draw,%
+            ellipse%
+        }%
+    ]%
+%
+    \matrix[package body] (les-fleurs-body) {
+        Log in.
+    \\
+        Log out.
+    \\
+        Search for items.
+    \\
+        Add item to the cart.
+    \\
+        Remove items from the cart.
+    \\
+        Place the order.
+    \\
+    };
+    \node[package head] at (les-fleurs-body.north west) {Les Fleurs Shop};
 \end{tikzpicture}
 
 \end{document}
