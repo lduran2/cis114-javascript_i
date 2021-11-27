@@ -4,10 +4,14 @@
 
 \title{CIS 114 Final Project Proposal - UML Use Case Diagram}
 \author{Leomar Durán}
-\date{26 November 2021}
+\date{27 November 2021}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHANGELOG :
+%     2021-11-27t15:13
+%         actor labels, associations in loop,
+%         better loop variable
+%
 %     2021-11-27t03:45
 %         detailed administrator, looped repetitive tasks
 %
@@ -85,6 +89,9 @@
     }%
 \makeatother
 
+\def\echoeast{east}
+\def\echowest{west}
+
 \begin{document}
 
 \begin{tikzpicture}
@@ -130,30 +137,39 @@
     \actor*{User}{-1in}{0pt};
     \node at (les-fleurs-body.east) {};
     \actor*{Administrator}{1in}{0pt};
-% actor labels
-    \foreach \a in {User,Administrator}
-        \node[below=0pt of \a-south] {\a};
-% associations
-    % \p actor port
-    % \q user case port
-    % \M actor--user case mappings
-    \foreach \p/\q/\M in {%
-        east/west/{%
+%    \foreach \a in {User,Administrator}
+        
+    % \side the actor is of the use case packages
+    % \Map actor--user case mappings
+    \foreach \side/\Map in {%
+        west/{%
             User/{1,2,...,7}%
         },%
-        west/east/{%
+        east/{%
             Administrator/{1,2,3}%
         }%
-    }%
-        % \a actor
-        % \S use case set
-        \foreach \a/\S in \M
-            % \k use case index
-            \foreach \k in \S
-                \draw (\a-\p) -- (les-fleurs-body-\k-1.\q);
-            % \foreach \k
-        % \foreach \a/\S
-    % \foreach \d/\e/\O
+    }{
+        % \pactor port of actor from which to draw
+        % set use case port \pactor according to \side
+        \ifx\side\echowest
+            \def\pactor{east}
+        % \ifx\side\echowest
+        \else\ifx\side\echoeast
+            \def\pactor{west}
+        \fi\fi % \side\echoeast
+%
+        % \actor
+        % \Usecases use case set
+        \foreach \actor/\Usecases in \Map {
+% each actor label
+            \node[below=0pt of \actor-south] {\actor};
+% each association
+            % \usecaseno use case number
+            \foreach \usecaseno in \Usecases {
+                \draw (\actor-\pactor) -- (les-fleurs-body-\usecaseno-1.\side);
+            } % \foreach \usecaseno
+        } % \foreach \actor/\Usercases
+    } % \foreach \side/\Map
 \end{tikzpicture}
 
 \end{document}
