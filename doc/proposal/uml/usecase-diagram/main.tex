@@ -8,6 +8,9 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHANGELOG :
+%     2021-11-27t03:45
+%         detailed administrator, looped repetitive tasks
+%
 %     2021-11-27t03:15
 %         associated user to their use cases
 %
@@ -45,7 +48,7 @@
 }%
 
 % The actor shape including scope and ports
-% @param * adds the previous 
+% @param * adds the last x/y-coordinates to x/y-shifts
 % @param 1 scale (default 1)
 % @param 2 port name prefix
 % @param 3 x-shift
@@ -122,15 +125,35 @@
     \\
     };
     \node[package head] at (les-fleurs-body.north west) {Les Fleurs Shop};
-%
+% actors
     \node at (les-fleurs-body.west) {};
-    \actor*{user}{-1in}{0pt};
-    \node[below=0pt of user-south] {User};
-    \foreach \k in {1,2,...,7}
-        \draw (user-east) -- (les-fleurs-body-\k-1.west);
-%
+    \actor*{User}{-1in}{0pt};
     \node at (les-fleurs-body.east) {};
-    \actor*{server}{+1in}{0pt};
+    \actor*{Administrator}{1in}{0pt};
+% actor labels
+    \foreach \a in {User,Administrator}
+        \node[below=0pt of \a-south] {\a};
+% associations
+    % \p actor port
+    % \q user case port
+    % \M actor--user case mappings
+    \foreach \p/\q/\M in {%
+        east/west/{%
+            User/{1,2,...,7}%
+        },%
+        west/east/{%
+            Administrator/{1,2,3}%
+        }%
+    }%
+        % \a actor
+        % \S use case set
+        \foreach \a/\S in \M
+            % \k use case index
+            \foreach \k in \S
+                \draw (\a-\p) -- (les-fleurs-body-\k-1.\q);
+            % \foreach \k
+        % \foreach \a/\S
+    % \foreach \d/\e/\O
 \end{tikzpicture}
 
 \end{document}
