@@ -8,9 +8,13 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHANGELOG :
+%     2021-11-27t15:37
+%         loop to place actors
+%         better loop variables in \actor
+%
 %     2021-11-27t15:13
 %         actor labels, associations in loop,
-%         better loop variable
+%         better loop variables in document
 %
 %     2021-11-27t03:45
 %         detailed administrator, looped repetitive tasks
@@ -75,15 +79,17 @@
         \begin{scope}[scale=#1,xshift=#3,yshift=#4,line width=1pt]%
             \unscopedactor;%
             % create the actor ports
-            \foreach \n/\x/\y in {%
+            % \port actor port
+            % \x/\y actor coordinates
+            \foreach \port/\x/\y in {%
                 /0/0,% central port
                 -north/0/30pt,%
                 -west/-15pt/10pt,%
                 -east/15pt/10pt,%
                 -south/0/-30pt%
             }%
-                \coordinate (#2\n) at (\x,\y);%
-            % \foreach \n/\x/\y
+                \coordinate (#2\port) at (\x,\y);%
+            % \foreach \port/\x/\y
             #5%
         \end{scope}%
     }%
@@ -133,12 +139,11 @@
     };
     \node[package head] at (les-fleurs-body.north west) {Les Fleurs Shop};
 % actors
-    \node at (les-fleurs-body.west) {};
-    \actor*{User}{-1in}{0pt};
-    \node at (les-fleurs-body.east) {};
-    \actor*{Administrator}{1in}{0pt};
-%    \foreach \a in {User,Administrator}
-        
+    \foreach \side/\actorname/\x in {west/User/-1in,east/Administrator/1in} {
+        \node at (les-fleurs-body.\side) {};
+        \actor*\actorname\x0;
+    }
+%
     % \side the actor is of the use case packages
     % \Map actor--user case mappings
     \foreach \side/\Map in {%
@@ -158,17 +163,17 @@
             \def\pactor{west}
         \fi\fi % \side\echoeast
 %
-        % \actor
+        % \actorname
         % \Usecases use case set
-        \foreach \actor/\Usecases in \Map {
-% each actor label
-            \node[below=0pt of \actor-south] {\actor};
-% each association
+        \foreach \actorname/\Usecases in \Map {
+% label the actor
+            \node[below=0pt of \actorname-south] {\actorname};
+% associate from the actor
             % \usecaseno use case number
             \foreach \usecaseno in \Usecases {
-                \draw (\actor-\pactor) -- (les-fleurs-body-\usecaseno-1.\side);
+                \draw (\actorname-\pactor) -- (les-fleurs-body-\usecaseno-1.\side);
             } % \foreach \usecaseno
-        } % \foreach \actor/\Usercases
+        } % \foreach \actorname/\Usercases
     } % \foreach \side/\Map
 \end{tikzpicture}
 
