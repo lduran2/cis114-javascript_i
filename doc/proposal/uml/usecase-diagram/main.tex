@@ -8,6 +8,9 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHANGELOG :
+%     2021-11-27t03:08
+%         add the user and first server actor
+%
 %     2021-11-27t01:24
 %         create the package of use cases
 %
@@ -25,6 +28,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage{tikz} % for tikzpicture
+\usetikzlibrary{calc}
 \usetikzlibrary{positioning}
 \usetikzlibrary{matrix}
 \usetikzlibrary{shapes}
@@ -38,27 +42,42 @@
 }%
 
 % The actor shape including scope and ports
-% @param 1 = scale (default 1)
-% @param 2 = port name prefix
-% @param 3 = x-shift
-% @param 4 = y-shift
-% @param 5 = extensions after the actor within scope
-\newcommand*\actor[5][1]{%
-    \begin{scope}[scale=#1,xshift=#3,yshift=#4,line width=1pt]%
-        \unscopedactor;%
-        % create the actor ports
-        \foreach \n/\x/\y in {%
-            /0/0,% central port
-            -north/0/30pt,%
-            -west/-15pt/10pt,%
-            -east/15pt/10pt,%
-            -south/0/-30pt%
-        }%
-            \coordinate (#2\n) at (\x,\y);%
-        % \foreach \n/\x/\y
-        #5%
-    \end{scope}%
-}%
+% @param * adds the previous 
+% @param 1 scale (default 1)
+% @param 2 port name prefix
+% @param 3 x-shift
+% @param 4 y-shift
+% @param 5 extensions after the actor within scope
+\makeatletter
+    \newcommand*\actor{%
+        \@ifstar%
+            \actor@star%
+            \actor@nostar%
+    }%
+    \newcommand*\actor@star[5][1]{%
+        % coordinates stored for positioning actors
+        \newdimen\xcoord
+        \newdimen\ycoord
+        \pgfgetlastxy\xcoord\ycoord;%
+        \actor@nostar[#1]{#2}{\xcoord+#3}{\ycoord+#4}{#5}%
+    }%
+    \newcommand*\actor@nostar[5][1]{%
+        \begin{scope}[scale=#1,xshift=#3,yshift=#4,line width=1pt]%
+            \unscopedactor;%
+            % create the actor ports
+            \foreach \n/\x/\y in {%
+                /0/0,% central port
+                -north/0/30pt,%
+                -west/-15pt/10pt,%
+                -east/15pt/10pt,%
+                -south/0/-30pt%
+            }%
+                \coordinate (#2\n) at (\x,\y);%
+            % \foreach \n/\x/\y
+            #5%
+        \end{scope}%
+    }%
+\makeatother
 
 \begin{document}
 
@@ -84,6 +103,8 @@
     ]%
 %
     \matrix[package body] (les-fleurs-body) {
+        Register.
+    \\
         Log in.
     \\
         Log out.
@@ -98,6 +119,13 @@
     \\
     };
     \node[package head] at (les-fleurs-body.north west) {Les Fleurs Shop};
+%
+    \node at (les-fleurs-body.west) {};
+    \actor*{user}{-1in}{0pt};
+    \node[below=0pt of user-south] {User};
+%
+    \node at (les-fleurs-body.east) {};
+    \actor*{server}{+1in}{0pt};
 \end{tikzpicture}
 
 \end{document}
