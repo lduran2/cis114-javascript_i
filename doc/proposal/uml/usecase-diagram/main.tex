@@ -7,6 +7,9 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHANGELOG :
+%     2021-11-26t20:37
+%         documented \actor[5][1]
+%
 %     2021-11-26t20:25
 %         added ports to actor
 %
@@ -20,7 +23,7 @@
 \usepackage{tikz} % for tikzpicture
 \usetikzlibrary{positioning}
 
-% The actor shape with scope or nodes
+% The actor shape without scope or ports
 \newcommand*\unscopedactor{%
     \draw (0,22.5pt) circle (7.5pt);% head
     \draw (0,15pt) -- ++(0,-25pt) -- ++(-15pt,-20pt);% body and left leg
@@ -28,10 +31,15 @@
     \draw (0,-10pt) -- ++(15pt,-20pt)% right leg
 }%
 
+% The actor shape including scope and ports
+% @param 1 = scale (default 1)
+% @param 2 = port name prefix
+% @param 3 = x-shift
+% @param 4 = y-shift
+% @param 5 = commands after the actor within scope
 \newcommand*\actor[5][1]{%
     \begin{scope}[scale=#1,xshift=#3,yshift=#4,line width=1pt]%
         \unscopedactor;%
-%
         % create the actor ports
         \foreach \n/\x/\y in {
             /0/0,
@@ -41,6 +49,8 @@
             -south/0/-30pt
         }
             \coordinate (#2\n) at (\x,\y);
+        % \foreach \n/\x/\y
+        #5
     \end{scope}%
 }%
 
