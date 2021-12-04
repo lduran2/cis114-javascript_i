@@ -3,13 +3,16 @@
  * Gets data from the JSON action of each JSON form and populates them.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-12-03t23:00
+ * When      : 2021-12-03t23:16
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.1.6
+ * Version   : 1.1.7
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/scripts/populate_json_forms.js
  *
  * CHANGELOG :
+ *     v1.1.7 - 2021-12-03t23:16
+ *         handling not OK status
+ *
  *     v1.1.6 - 2021-12-03t23:00
  *         populating the array lists
  *
@@ -43,6 +46,8 @@
 
 /** enumeration of the requestType for JSON files */
 const JSON_TYPE = 'json';
+/** enumeration of an OK status */
+const OK_STATUS = 200;
 
 /**
  * Gets data from the JSON action of each JSON form and populates them.
@@ -99,6 +104,12 @@ function createPopulateForm(formEl) {
         console.log('formEl:', formEl);
         console.log('evnt:', evnt);
 
+        /* if not OK status */
+        if (OK_STATUS !== evnt.target.status) {
+            /* throw an error */
+            throw `${evnt.target.status}: ${evnt.target.statusText}`;
+        } /* if (OK_STATUS !== evnt.target.status) */
+
         /* get the response data */
         const DATA = evnt.target.response;
         /* iterate the keys of DATA */
@@ -124,6 +135,18 @@ function createPopulateForm(formEl) {
 } /* end function createPopulateForm(formEl) */
 
 /**
+ * Throws a request loading error.
+ * @param evnt : Event = the event that triggers this listener
+ */
+function throwRequestLoadingError(evnt) {
+    /* log the event */
+    console.log('throwRequestLoadingError(evnt)');
+    console.log('evnt:', evnt);
+    /* stop the program */
+    throw 'error loading request';
+} /* end function throwRequestLoadingError(evnt) */
+
+/**
  * Assembles list items from the given array of items and adds them
  * to the given list.
  * @param items = stringable items to add to the list
@@ -140,18 +163,6 @@ function appendItemTextsTo(items, listEl) {
         listEl.appendChild(LI_EL);
     } /* for (const ITEM of items) */
 } /* end function appendItemTextsTo(items, listEl) */
-
-/**
- * Throws a request loading error.
- * @param evnt : Event = the event that triggers this listener
- */
-function throwRequestLoadingError(evnt) {
-    /* log the event */
-    console.log('throwRequestLoadingError(evnt)');
-    console.log('evnt:', evnt);
-    /* stop the program */
-    throw 'error loading request';
-} /* end function throwRequestLoadingError(evnt) */
 
 /* add main to the window load event */
 document.addEventListener('DOMContentLoaded', main);
