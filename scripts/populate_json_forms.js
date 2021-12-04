@@ -3,13 +3,16 @@
  * Gets data from the JSON action of each JSON form and populates them.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-12-03t22:38
+ * When      : 2021-12-03t23:00
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.1.5
+ * Version   : 1.1.6
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/scripts/populate_json_forms.js
  *
  * CHANGELOG :
+ *     v1.1.6 - 2021-12-03t23:00
+ *         populating the array lists
+ *
  *     v1.1.5 - 2021-12-03t22:38
  *         fixed checking the type of objects (arrays are objects)
  *
@@ -95,6 +98,7 @@ function createPopulateForm(formEl) {
         console.log('createPopulateForm(formEl)(evnt)');
         console.log('formEl:', formEl);
         console.log('evnt:', evnt);
+
         /* get the response data */
         const DATA = evnt.target.response;
         /* iterate the keys of DATA */
@@ -110,11 +114,32 @@ function createPopulateForm(formEl) {
             } /* end if ('string'===typeof VALUE) { */
             /* if the type of VALUE is an object */
             else if ('object'===typeof VALUE) {
-                console.log('object', VALUE);
+                /* get the corresponding list */
+                const LIST_EL = formEl.querySelector(`#${KEY}`);
+                /* append the items in VALUE to the list */
+                appendItemTextsTo(VALUE, LIST_EL);
             } /* end if ('object'===typeof VALUE) */
         } /* for (const KEY of Object.keys(DATA)) */
     }; /* return function (evnt) */
 } /* end function createPopulateForm(formEl) */
+
+/**
+ * Assembles list items from the given array of items and adds them
+ * to the given list.
+ * @param items = stringable items to add to the list
+ * @param listEl : Node = list element to append the list items to
+ */
+function appendItemTextsTo(items, listEl) {
+    /* loop through the object */
+    for (const ITEM of items) {
+        /* assemble a list item element */
+        const LI_EL = document.createElement('li');
+        const ITEM_TEXT = document.createTextNode(ITEM);
+        LI_EL.appendChild(ITEM_TEXT);
+        /* append the list item */
+        listEl.appendChild(LI_EL);
+    } /* for (const ITEM of items) */
+} /* end function appendItemTextsTo(items, listEl) */
 
 /**
  * Throws a request loading error.
