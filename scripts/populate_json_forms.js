@@ -3,13 +3,16 @@
  * Gets data from the JSON action of each JSON form and populates them.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-12-03t22:03
+ * When      : 2021-12-03t22:11
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.1.3
+ * Version   : 1.1.4
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/scripts/populate_json_forms.js
  *
  * CHANGELOG :
+ *     v1.1.4 - 2021-12-03t22:11
+ *         populating string fields
+ *
  *     v1.1.3 - 2021-12-03t22:03
  *         check the type of the values in the data
  *
@@ -95,10 +98,14 @@ function createPopulateForm(formEl) {
         for (const KEY of Object.keys(DATA)) {
             /* get the value at KEY in DATA */
             const VALUE = DATA[KEY];
-            /* check the type of VALUE */
+            /* if the type of VALUE is string */
             if ('string'===typeof VALUE) {
-                console.log('string', VALUE);
+                /* update corresponding form element's value */
+                formEl.elements[KEY].value = VALUE;
+                /* and the field's size */
+                formEl.elements[KEY].setAttribute('size', VALUE.length);
             } /* end if ('string'===typeof VALUE) { */
+            /* if the type of VALUE is array */
             else if ('array'===typeof VALUE) {
                 console.log('array', VALUE);
             } /* end if ('array'===typeof VALUE) */
