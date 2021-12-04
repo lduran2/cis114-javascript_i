@@ -19,10 +19,12 @@
 'use strict';
 
 /**
- * Gets data from '/db/leomar.json' and displays them.
+ * Gets data from the JSON action of each JSON form and populates them.
  * @param evnt : Event = the event that triggers this listener
  */
 function main(evnt) {
+    const JSON_TYPE = 'json';
+    const REQUEST = new XMLHttpRequest();
     /* get and check the document document body */
     const BODY_EL = document.querySelector('body');
     if (!BODY_EL) {
@@ -30,16 +32,52 @@ function main(evnt) {
     } /* if (!BODY_EL) */
 
     /* get the JSON forms */
-    const JSON_FORM_ELS = BODY_EL.querySelectorAll("form[action$='.json']");
+    const JSON_FORM_SELECTOR = `form[action$='.${JSON_TYPE}']`;
+    const JSON_FORM_ELS = BODY_EL.querySelectorAll(JSON_FORM_SELECTOR);
     /* loop through them */
-    for (const FORM of JSON_FORM_ELS) {
-        /* get the action */
-        const ACTION = FORM.getAttribute('action');
-        console.log(ACTION);
-    } /* end for (const FORM of JSON_FORM_ELS) */
+    for (const FORM_EL of JSON_FORM_ELS) {
+        /* get the form action and method */
+        const METHOD = FORM_EL.getAttribute('method');
+        const ACTION = FORM_EL.getAttribute('action');
+        /* open the request */
+        REQUEST.open(METHOD, 'https://developer.mozilla.org/');
+        REQUEST.responseType = JSON_TYPE;
+        /* add the load and error events */
+        REQUEST.addEventListener('load', createPopulateForm(FORM_EL));
+        REQUEST.addEventListener('error', throwRequestLoadingError);
+        /* send the request */
+        REQUEST.send();
+    } /* end for (const FORM_EL of JSON_FORM_ELS) */
 
+    /* finish */
     console.log('Done.');
 } /* end function main() */
+
+/**
+ * Creates an event that populates the given form element.
+ * @param evnt : Event = the event that triggers this listener
+ */
+function createPopulateForm(formEl) {
+    return function (evnt) {
+        /* log the event */
+        console.log('createPopulateForm(formEl)(evnt)');
+        console.log('formEl:', formEl);
+        console.log('evnt:', evnt);
+        /* expand the response */
+        console.dir(evnt.target.response);
+    }; /* return function (evnt) */
+} /* end function createPopulateForm(formEl) */
+
+/**
+ * Throws a request loading error.
+ * @param evnt : Event = the event that triggers this listener
+ */
+function throwRequestLoadingError(evnt) {
+    /* log the event */
+    console.log('throwRequestLoadingError(evnt)');
+    console.log('evnt:', evnt);
+    throw 'error loading request';
+} /* end function throwRequestLoadingError(evnt) */
 
 /* add main to the window load event */
 document.addEventListener('DOMContentLoaded', main);
