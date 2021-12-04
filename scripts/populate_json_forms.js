@@ -3,18 +3,26 @@
  * Gets data from the JSON action of each JSON form and populates them.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-12-03t21:30
+ * When      : 2021-12-03t22:03
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.1.2
+ * Version   : 1.1.3
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/scripts/populate_json_forms.js
  *
  * CHANGELOG :
+ *     v1.1.3 - 2021-12-03t22:03
+ *         check the type of the values in the data
+ *
  *     v1.1.2 - 2021-12-03t21:30
- *         tested multiple forms
+ *         tested multiple forms.
+ *         Had a null JSON file before the actual form.
+ *         Result: XMLHttpRequest objects cannot be reused.
  *
  *     v1.1.1 - 2021-12-03t21:14
- *         testing `REQUEST.onerror`
+ *         testing `REQUEST.onerror`.
+ *         All actions are replaced with
+ *         <https://developer.mozilla.org/>, causing a XSS error that
+ *         stops all events.
  *
  *     v1.1.0 - 2021-12-03t20:01
  *         started populating multiple forms
@@ -83,8 +91,18 @@ function createPopulateForm(formEl) {
         console.log('evnt:', evnt);
         /* get the response data */
         const DATA = evnt.target.response;
-        /* expand the response */
-        console.dir(DATA);
+        /* iterate the keys of DATA */
+        for (const KEY of Object.keys(DATA)) {
+            /* get the value at KEY in DATA */
+            const VALUE = DATA[KEY];
+            /* check the type of VALUE */
+            if ('string'===typeof VALUE) {
+                console.log('string', VALUE);
+            } /* end if ('string'===typeof VALUE) { */
+            else if ('array'===typeof VALUE) {
+                console.log('array', VALUE);
+            } /* end if ('array'===typeof VALUE) */
+        } /* for (const KEY of Object.keys(DATA)) */
     }; /* return function (evnt) */
 } /* end function createPopulateForm(formEl) */
 
