@@ -1,2 +1,5 @@
 # compressed files, project templates
 *.zip
+
+# datasets (JSON) for testing
+dataset-in/
