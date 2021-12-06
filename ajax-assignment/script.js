@@ -4,13 +4,16 @@
  * retrieve the art installation locations on click.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-12-06t17:08
+ * When      : 2021-12-06t17:17
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.0.0
+ * Version   : 1.1.0
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/ajax-assignment/script.js
  *
  * CHANGELOG :
+ *     v1.1.0 - 2021-12-06t17:17
+ *         started tests for clicking on a person
+ *
  *     v1.0.0 - 2021-12-06t17:08
  *         refactored `handlePeopleAjaxResponse` and `makeAjaxRequest` for reusable code
  *
@@ -86,7 +89,7 @@ function createMakeAjaxRequest(url, handleOnLoad) {
 } /* end function createMakeAjaxRequest(url, handleOnLoad) */
 
 /** flags to test only click events on each person */
-const TESTING_PERSON_ON_CLICK = false;
+const TESTING_PERSON_ON_CLICK = true;
 
 function main() {
   if (!TESTING_PERSON_ON_CLICK) {
