@@ -4,13 +4,17 @@
  * retrieve the art installation locations on click.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-12-06t17:40
+ * When      : 2021-12-06t17:58
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.1.2
+ * Version   : 1.1.3
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/ajax-assignment/script.js
  *
  * CHANGELOG :
+ *     v1.1.3 - 2021-12-06t17:58
+ *         creates the list of locations from the AJAX response and
+ *             appends to the `location-results` box
+ *
  *     v1.1.2 - 2021-12-06t17:40
  *         looping through the art installations
  *
@@ -48,16 +52,27 @@ let handlePeopleAjaxResponse = createHandleIfOkResponse(
 );
 
 /**
- * Handles the AJAX response for locations.  Just logs for now.
+ * Populates the `location-results` box from an AJAX response for
+ * locations.
  * @param evnt : Event = the AJAX `onload` event
  */
 let handleLocationsAjaxRequest = createHandleIfOkResponse(
   function (evnt) {
+    /* create the ordered list element */
+    const OL_EL = document.createElement('ol');
     /* loop through each art from the artist */
     for (const ART of evnt.target.response.body.art) {
-      /* log the descripton of each location */
-      console.log(ART.location.description);
+      /* get the description of the location of the current artwork */
+      const DESCRIPTION = ART.location.description;
+      /* create a list item with the descripton of each location */
+      const DESCRIPTION_EL = document.createElement('li');
+      const DESCRIPTION_TEXT = document.createTextNode(DESCRIPTION);
+      DESCRIPTION_EL.appendChild(DESCRIPTION_TEXT);
+      /* append to the list */
+      OL_EL.appendChild(DESCRIPTION_EL);
     } /* for (const ART of evnt.target.response.body.art) */
+    /* append the complete list to the `location-results` box */
+    document.querySelector('#location-results').appendChild(OL_EL);
   } /* end function (evnt) */
 );
 
