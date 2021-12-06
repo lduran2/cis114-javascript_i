@@ -4,13 +4,16 @@
  * retrieve the art installation locations on click.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-12-06t17:17
+ * When      : 2021-12-06t17:40
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.1.0
+ * Version   : 1.1.2
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/ajax-assignment/script.js
  *
  * CHANGELOG :
+ *     v1.1.2 - 2021-12-06t17:40
+ *         looping through the art installations
+ *
  *     v1.1.1 - 2021-12-06t17:31
  *         `handleLocationsAjaxRequest` just logs the request
  *
@@ -50,7 +53,11 @@ let handlePeopleAjaxResponse = createHandleIfOkResponse(
  */
 let handleLocationsAjaxRequest = createHandleIfOkResponse(
   function (evnt) {
-    console.log(evnt.target.response);
+    /* loop through each art from the artist */
+    for (const ART of evnt.target.response.body.art) {
+      /* log the descripton of each location */
+      console.log(ART.location.description);
+    } /* for (const ART of evnt.target.response.body.art) */
   } /* end function (evnt) */
 );
 
