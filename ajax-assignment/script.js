@@ -11,6 +11,10 @@
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/ajax-assignment/script.js
  *
  * CHANGELOG :
+ *     v1.2.0 - 2021-12-06t18:38
+ *         adds the handler to each person to populate the
+ *             `location-results` box
+ *
  *     v1.1.3 - 2021-12-06t17:58
  *         creates the list of locations from the AJAX response and
  *             appends to the `location-results` box
@@ -135,11 +139,31 @@ function createMakeAjaxRequest(url, handleOnLoad) {
 /** flags to test only click events on each person */
 const TESTING_PERSON_ON_CLICK = true;
 
+/**
+ * Adds the event handler to make location AJAX requests to each person
+ * in the `results` box list.
+ */
+function addPersonOnClicks() {
+  /* get the list items in `results` box */
+  const RESULTS_LI_ELS = document.querySelectorAll('#results li');
+  /* loop through each list item */
+  for (const LI_EL of RESULTS_LI_ELS) {
+    /* get the person's URL */
+    const URL = LI_EL.dataset.url;
+    /* create the event handler */
+    const HANDLE = createMakeAjaxRequest(
+      URL, handleLocationsAjaxRequest
+    );
+    /* add it to the list item */
+    LI_EL.addEventListener('click', HANDLE);
+  } /* end for (const LI_EL of RESULTS_LI_ELS) */
+} /* end function addPersonOnClicks() */
+
 function main() {
   if (!TESTING_PERSON_ON_CLICK) {
     makeAjaxRequest();
   }
-  makeLocationsAjaxRequest();
+  addPersonOnClicks();
 }; /* end function main() */
 
 main();
