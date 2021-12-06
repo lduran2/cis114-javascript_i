@@ -11,6 +11,9 @@
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/ajax-assignment/script.js
  *
  * CHANGELOG :
+ *     v1.1.1 - 2021-12-06t17:31
+ *         `handleLocationsAjaxRequest` just logs the request
+ *
  *     v1.1.0 - 2021-12-06t17:17
  *         started tests for clicking on a person
  *
@@ -23,7 +26,7 @@
 'use strict';
 
 /**
- * Handles the AJAX response for people.
+ * Populates the `results` box from an AJAX response for people.
  * @param evnt : Event = the AJAX `onload` event
  */
 let handlePeopleAjaxResponse = createHandleIfOkResponse(
@@ -38,7 +41,17 @@ let handlePeopleAjaxResponse = createHandleIfOkResponse(
       unorderedList.appendChild(newListItem);
     }
     document.querySelector('#results').appendChild(unorderedList);
-  }
+  } /* end function (evnt) */
+);
+
+/**
+ * Handles the AJAX response for locations.  Just logs for now.
+ * @param evnt : Event = the AJAX `onload` event
+ */
+let handleLocationsAjaxRequest = createHandleIfOkResponse(
+  function (evnt) {
+    console.log(evnt.target.response);
+  } /* end function (evnt) */
 );
 
 /**
@@ -54,16 +67,25 @@ function createHandleIfOkResponse(handleEvent) {
       return;
     }
     return handleEvent(event);
-  }; /* function (evnt) */
-} /* function createHandleIfOkResponse(handleEvent) */
+  }; /* end function (evnt) */
+} /* end function createHandleIfOkResponse(handleEvent) */
 
 /**
- * `makeAjaxRequest` used in `main`.  This implementation delegates
- * to `createMakeAjaxRequest`.
+ * Makes a request to the people database and attaches the handler that
+ * populates the `results` box.
  * @param evnt : Event = the event that creates the request
  */
 let makeAjaxRequest = createMakeAjaxRequest(
   'people.json', handlePeopleAjaxResponse
+);
+
+/**
+ * Makes a request to one of the specific artist's databases and
+ * attaches the handler that populates the `location-results` box.
+ * @param evnt : Event = the event that creates the request
+ */
+let makeLocationsAjaxRequest = createMakeAjaxRequest(
+  'dataset-in/1.json', handleLocationsAjaxRequest
 );
 
 /**
@@ -85,7 +107,7 @@ function createMakeAjaxRequest(url, handleOnLoad) {
     request.addEventListener('error', function(evnt) {
       console.error(evnt);
     });
-  }; /* function (evnt) */
+  }; /* end function (evnt) */
 } /* end function createMakeAjaxRequest(url, handleOnLoad) */
 
 /** flags to test only click events on each person */
@@ -95,6 +117,7 @@ function main() {
   if (!TESTING_PERSON_ON_CLICK) {
     makeAjaxRequest();
   }
-}
+  makeLocationsAjaxRequest();
+}; /* end function main() */
 
 main();
