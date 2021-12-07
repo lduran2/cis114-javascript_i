@@ -3,11 +3,16 @@
  * Populates the `results` box, then adds events to each person that
  * retrieve the art installation locations on click.
  *
+ * The dataset `1.json` is used in the directory `./dataset-in` to test
+ * `addPersonOnClicks` in `test-person-on-click.html`.  This avoids
+ * overwhelming <www.philart.net>.
+ *
  * By        : Leomar Duran <https://github.com/lduran2>
  * When      : 2021-12-06t20:26
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
  * Version   : 1.2.2
+ * Dataset   : http://www.philart.net/api/people/1.json
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/ajax-assignment/script.js
  *
  * CHANGELOG :
