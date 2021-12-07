@@ -41,13 +41,7 @@
 %         create the package of use cases
 %
 %     2021-11-26t20:37
-%         documented \actor[5][1]
-%
-%     2021-11-26t20:25
-%         added ports to actor
-%
-%     2021-11-26t16:40
-%         created actor shapes
+%         code in `actor.sty` was fully implemented
 %
 %     2021-11-26t14:53
 %         started with an empty node
@@ -66,32 +60,32 @@
 \def\echoeast{east}
 \def\echowest{west}
 
+\tikzset{
+    package head/.style={%
+        draw,%
+        trapezium,%
+        trapezium left angle=90,%
+        anchor=bottom left corner,%
+        yshift=-0.5pt%
+    },%
+    package body/.style={%
+        draw,%
+        matrix of nodes,%
+        row sep=10pt,%
+        every node/.style={use case},%
+    },%
+    use case/.style={%
+        draw,%
+        ellipse%
+    },%
+    actor label/.style={%
+        below=0pt of #1-south%
+    }
+}
+
 \begin{document}
 
 \begin{tikzpicture}
-    [%
-        package head/.style={%
-            draw,%
-            trapezium,%
-            trapezium left angle=90,%
-            anchor=bottom left corner,%
-            yshift=-0.5pt%
-        },%
-        package body/.style={%
-            draw,%
-            matrix of nodes,%
-            row sep=10pt,%
-            every node/.style={use case},%
-        },%
-        use case/.style={%
-            draw,%
-            ellipse%
-        },%
-        actor label/.style={%
-            below=0pt of #1-south%
-        }
-    ]%
-%
     \matrix[package body] (les-fleurs-body) {
         Register.
     \\
@@ -113,8 +107,6 @@
     \\
     };
     \node[package head] at (les-fleurs-body.north west) {Les Fleurs Shop};
-    \foreach \side/\actorname/\x in {west/User/-1in,east/Administrator/1in} {
-    }
 %
     \newcounter{nactors}
     % draw each actor, its label and associations
