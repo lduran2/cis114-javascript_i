@@ -4,13 +4,18 @@
  * retrieve the art installation locations on click.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-12-06t17:58
+ * When      : 2021-12-06t19:32
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.1.3
+ * Version   : 1.2.1
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/ajax-assignment/script.js
  *
  * CHANGELOG :
+ *     v1.2.1 - 2021-12-06t19:32
+ *         refactored `createMakeAjaxRequest` to use multiple functions
+ *             for the handler
+ *         TESTING_PERSON_ON_CLICK switches on the ID of the body
+ *
  *     v1.2.0 - 2021-12-06t18:38
  *         adds the handler to each person to populate the
  *             `location-results` box
@@ -29,7 +34,8 @@
  *         started tests for clicking on a person
  *
  *     v1.0.0 - 2021-12-06t17:08
- *         refactored `handlePeopleAjaxResponse` and `makeAjaxRequest` for reusable code
+ *         refactored `handlePeopleAjaxResponse` and `makeAjaxRequest`
+ *             for reusable code
  *
  *     v0.0.0 - 2021-11-16t00:46
  *         original template by Professor Liss
@@ -102,42 +108,35 @@ function createHandleIfOkResponse(handleEvent) {
  * @param evnt : Event = the event that creates the request
  */
 let makeAjaxRequest = createMakeAjaxRequest(
-  'people.json', handlePeopleAjaxResponse
-);
-
-/**
- * Makes a request to one of the specific artist's databases and
- * attaches the handler that populates the `location-results` box.
- * @param evnt : Event = the event that creates the request
- */
-let makeLocationsAjaxRequest = createMakeAjaxRequest(
-  'dataset-in/1.json', handleLocationsAjaxRequest
+  'people.json', [handlePeopleAjaxResponse, addPersonOnClicks]
 );
 
 /**
  * Creates an event handler that makes an AJAX request.  The AJAX
  * request is a GET request to the given url.  Upon loading the AJAX
- * request, the given `handleOnLoad` is called.
+ * request, the function given in `handlesOnLoad` is called.
  * @param url : String = url to where to send the request
- * @param handleOnLoad : Function(evnt) = the event handler
+ * @param handlesOnLoad : Array<Function(evnt)> = list of event handlers
  */
-function createMakeAjaxRequest(url, handleOnLoad) {
+function createMakeAjaxRequest(url, handlesOnLoad) {
   return function (evnt) {
     let request = new XMLHttpRequest();
     request.open('GET', url);
     request.responseType = 'json';
     request.send();
 
-    request.addEventListener('load', handleOnLoad);
+    request.addEventListener('load', function (evnt) {
+      /* loop through the handlers attaching each one */
+      for (const HANDLE of handlesOnLoad) {
+        HANDLE(evnt);
+      } /* end for (const HANDLE of handlesOnLoad) */
+    } /* end function (evnt) */);
 
     request.addEventListener('error', function(evnt) {
       console.error(evnt);
     });
   }; /* end function (evnt) */
-} /* end function createMakeAjaxRequest(url, handleOnLoad) */
-
-/** flags to test only click events on each person */
-const TESTING_PERSON_ON_CLICK = true;
+} /* end function createMakeAjaxRequest(url, handlesOnLoad) */
 
 /**
  * Adds the event handler to make location AJAX requests to each person
@@ -150,20 +149,36 @@ function addPersonOnClicks() {
   for (const LI_EL of RESULTS_LI_ELS) {
     /* get the person's URL */
     const URL = LI_EL.dataset.url;
-    /* create the event handler */
+    /* create an event handler that makes a request to one of the
+     * specific artist's databases and attaches the handler that
+     * populates the `location-results` box.
+     */
     const HANDLE = createMakeAjaxRequest(
-      URL, handleLocationsAjaxRequest
+      URL, [ handleLocationsAjaxRequest ]
     );
     /* add it to the list item */
     LI_EL.addEventListener('click', HANDLE);
   } /* end for (const LI_EL of RESULTS_LI_ELS) */
 } /* end function addPersonOnClicks() */
 
+/**
+ * Flags to test only click events on each person if the document body
+ * has the ID test-person-on-click.
+ */
+const TESTING_PERSON_ON_CLICK = (
+  null !== document.querySelector('body#test-person-on-click')
+);
+
 function main() {
+  /* if not testing onclick on persons, populate the `result` box */
   if (!TESTING_PERSON_ON_CLICK) {
     makeAjaxRequest();
-  }
-  addPersonOnClicks();
+  } /* if (!TESTING_PERSON_ON_CLICK) */
+  /* otherwise */
+  else {
+    /* add click events to every person in the `result` box */
+    addPersonOnClicks();
+  } /* end (!TESTING_PERSON_ON_CLICK) else */
 }; /* end function main() */
 
 main();
