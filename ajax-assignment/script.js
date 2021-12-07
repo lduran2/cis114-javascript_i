@@ -8,14 +8,19 @@
  * overwhelming <www.philart.net>.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-12-06t20:26
+ * When      : 2021-12-06t20:39
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.2.2
+ * Version   : 1.2.3
  * Dataset   : http://www.philart.net/api/people/1.json
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/ajax-assignment/script.js
  *
  * CHANGELOG :
+ *     v1.2.3 - 2021-12-06t20:39
+ *         renamed parameter `evnt` used by functions in
+ *             `createMakeAjaxRequest(url, handlesOnLoad)` to `evnt1`
+ *             to avoid scoping confusion
+ *
  *     v1.2.2 - 2021-12-06t20:26
  *         emptying the `location-results` box before populating
  *
@@ -164,15 +169,15 @@ function createMakeAjaxRequest(url, handlesOnLoad) {
     request.responseType = 'json';
     request.send();
 
-    request.addEventListener('load', function (evnt) {
+    request.addEventListener('load', function (evnt1) {
       /* loop through the handlers attaching each one */
       for (const HANDLE of handlesOnLoad) {
-        HANDLE(evnt);
+        HANDLE(evnt1);
       } /* end for (const HANDLE of handlesOnLoad) */
-    } /* end function (evnt) */);
+    } /* end function (evnt1) */);
 
-    request.addEventListener('error', function(evnt) {
-      console.error(evnt);
+    request.addEventListener('error', function(evnt1) {
+      console.error(evnt1);
     });
   }; /* end function (evnt) */
 } /* end function createMakeAjaxRequest(url, handlesOnLoad) */
