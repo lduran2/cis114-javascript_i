@@ -1,0 +1,42 @@
+@charset 'utf-8';
+
+header {
+    float: left;
+    background: rgb(127, 191, 255);
+    margin-bottom: 2em;
+    padding: 2%;
+    width: 96%;
+}
+
+header ul, header li {
+    float: left;
+    list-style: none;
+}
+
+header li + li {
+    margin-left: 0.25em;
+    border-left: 1px solid;
+    padding-left: 0.25em;
+}
+
+header + *, .item-picture + * {
+    clear: left;
+}
+
+.item-area {
+    width: 75%;
+    background: rgb(255, 191, 127);
+}
+
+h2, .price {
+    text-align: right;
+}
+
+.item-picture {
+    float: left;
+}
+
+.item-picture img {
+    width: 30%;
+}
+
