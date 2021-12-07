@@ -1,0 +1,1 @@
+END { system('convert -density 300 output.pdf uml-usecase-diagram.png'); }
