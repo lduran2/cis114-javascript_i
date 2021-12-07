@@ -8,7 +8,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHANGELOG :
-%     2021-12-06t10:39
+%     2021-12-06t22:39
 %         implemented `\findarrlen` to find length of arrays
 %
 %     2021-11-27t15:37
@@ -50,6 +50,7 @@
 \usepackage{tikz} % for tikzpicture
 \usetikzlibrary{calc}
 \usetikzlibrary{positioning}
+\usetikzlibrary{intersections}
 \usetikzlibrary{matrix}
 \usetikzlibrary{shapes}
 
@@ -93,9 +94,9 @@
                 -west/-15pt/10pt,%
                 -east/15pt/10pt,%
                 -south/0/-30pt%
-            }%
+            }{%
                 \coordinate (#2\port) at (\x,\y);%
-            % end \foreach \port/\x/\y
+            } % \foreach \port/\x/\y
             #5%
         \end{scope}%
     }%
@@ -162,47 +163,72 @@
     \foreach \side/\actorname/\x in {west/User/-1in,east/Administrator/1in} {
     }
 %
-    \newcounter{MapLen}
+    \newcounter{nactors}
     % draw each actor, its label and associations
     % \side the actor is of the use case packages
     % \Map actor--user case mappings
     \foreach \side/\Map in {%
         west/{%
-            User/{1,2,...,7,9}%
+            User/{1,2,...,7},%
+            User payment service/{8},%
+            User home address/{9}%
         },%
         east/{%
-            Administrator/{1,2,3}%
+            Administrator/{1,2,3},%
+            Item database/{4},%
+            Cart/{5,6},%
+            Seller system/{7,8},%
+            Deliveries/9%
         }%
     }{
-        \findarrlen\Map{MapLen}
+        \findarrlen\Map{nactors}
 
         % set according to \side
         %     \pactor port of actor from which to draw
-        %     \actorx distance from the \side
+        %     \actorxsgn side of the actor on the x-axis
         \ifx\side\echowest
             \def\pactor{east}
-            \def\actorx{-1in}
+            \def\actorxsgn{-}
         % \ifx\side\echowest
         \else\ifx\side\echoeast
             \def\pactor{west}
-            \def\actorx{1in}
+            \def\actorxsgn{+}
         \fi\fi % \side\echoeast
 %
         % \actorname
         % \Usecases use case set
-        \foreach \actorname/\Usecases in \Map {
+        \foreach \actorname/\Usecases[%
+            count=\iactor,%
+            % calculate the measure of the angle from the
+            % package to place the actor
+            % 90 +/- 180*(k/(1+N)) [deg]
+            % + if \side=west, - if \side=east
+            % k = (iactor) the index of the actor in the map
+            % N = (nactors) the number of actors on this side,
+            %     also known as the map length
+            evaluate=\iactor as \meas using
+            {90 - \actorxsgn(180*\iactor/(1 + \arabic{nactors}))}%
+        ] in \Map {
 % place the actor
-            \node at (les-fleurs-body.\side) {};
-            \actor*\actorname\actorx0;
+            % determine the angle from the package
+            \coordinate (\actorname{}angle) at ($(les-fleurs-body.\meas)+(\meas:1in)$);
+            % determine the distance from the package
+            \coordinate (\actorname{}dist) at ($(les-fleurs-body.\meas)+(\actorxsgn1in,0)$);
+            % place the empty node on the package
+            \node at (\actorname{}angle -| \actorname{}dist) {};
+            
+            % place actor 1in away in corresponding direction
+            %\actor*\actorname{\actorxsgn1in}0;
+            \actor*\actorname00;
 % label the actor
             \node[below=0pt of \actorname-south] {\actorname};
 % associations from the actor
             % \usecaseno use case number
             \foreach\usecaseno in \Usecases {
                 \draw (\actorname-\pactor) -- (les-fleurs-body-\usecaseno-1.\side);
-            } % \foreach \usecaseno
-        } % end \foreach \actorname/\Usercases
-    } % end \foreach \side/\Map
+            } % \foreach\usecaseno
+        } % \foreach \actorname/\Usercases
+    } % \foreach \side/\Map
 \end{tikzpicture}
 
 \end{document}
