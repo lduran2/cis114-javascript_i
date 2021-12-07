@@ -1,0 +1,37 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% tikzarrlen.sty
+% Creates \findarrlen, which uses tikz to find the length of a
+% comma-separated, curly brace-delimited array.
+%
+% By        : Leomar Duran <https://github.com/lduran2>
+% When      : 2021-12-07t03:24
+%
+% CHANGELOG :
+%     2021-12-07t03:24
+%         added an example use
+%
+%     2021-12-06t22:39
+%         implemented `\findarrlen` to find length of arrays
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{tikz} % for tikzpicture
+
+% Finds the number of elements in the array given by #1.
+% @param 1 array to iterate
+% @param 2 counter name
+\newcommand*\findarrlen[2]{%
+    \setcounter{#2}0%
+    \foreach\tmp in #1{%
+        \stepcounter{#2}%
+    }%
+}%
+
+% Demonstrates an example of \findarrlen.  Creates a node with
+% the number of cardinal directions.
+\newcommand*\examplefindarrlen{%
+    \begin{tikzpicture}%
+        \newcounter{ndirections}%
+        \findarrlen{{north,east,west,south}}{ndirections}%
+        \node {\arabic{ndirections}};%
+    \end{tikzpicture}%
+}%

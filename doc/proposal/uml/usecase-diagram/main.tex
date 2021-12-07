@@ -8,6 +8,12 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHANGELOG :
+%     2021-12-07t03:24
+%         abstracted `doc/lib/actor` `doc/lib/tikzarrlen`
+%
+%     2021-12-07t00:45
+%         implemented multiple input/output actors
+%
 %     2021-12-06t22:39
 %         implemented `\findarrlen` to find length of arrays
 %
@@ -48,69 +54,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage{tikz} % for tikzpicture
+\usepackage{doc/lib/actor} % for /actor*
+\usepackage{doc/lib/tikzarrlen} % for \findarrlen
 \usetikzlibrary{calc}
 \usetikzlibrary{positioning}
 \usetikzlibrary{intersections}
 \usetikzlibrary{matrix}
 \usetikzlibrary{shapes}
-
-% The actor shape without scope or ports
-\newcommand*\unscopedactor{%
-    \draw (0,22.5pt) circle (7.5pt);% head
-    \draw (0,15pt) -- ++(0,-25pt) -- ++(-15pt,-20pt);% body and left leg
-    \draw (-15pt,10pt) -- ++(30pt,0);% arms
-    \draw (0,-10pt) -- ++(15pt,-20pt)% right leg
-}%
-
-% The actor shape including scope and ports
-% @param * adds the last x/y-coordinates to x/y-shifts
-% @param 1 scale (default 1)
-% @param 2 port name prefix
-% @param 3 x-shift
-% @param 4 y-shift
-% @param 5 extensions after the actor within scope
-\makeatletter
-    \newcommand*\actor{%
-        \@ifstar%
-            \actor@star%
-            \actor@nostar%
-    }%
-    \newcommand*\actor@star[5][1]{%
-        % coordinates stored for positioning actors
-        \newdimen\xcoord
-        \newdimen\ycoord
-        \pgfgetlastxy\xcoord\ycoord;%
-        \actor@nostar[#1]{#2}{\xcoord+#3}{\ycoord+#4}{#5}%
-    }%
-    \newcommand*\actor@nostar[5][1]{%
-        \begin{scope}[scale=#1,xshift=#3,yshift=#4,line width=1pt]%
-            \unscopedactor;%
-            % create the actor ports
-            % \port actor port
-            % \x/\y actor coordinates
-            \foreach \port/\x/\y in {%
-                /0/0,% central port
-                -north/0/30pt,%
-                -west/-15pt/10pt,%
-                -east/15pt/10pt,%
-                -south/0/-30pt%
-            }{%
-                \coordinate (#2\port) at (\x,\y);%
-            } % \foreach \port/\x/\y
-            #5%
-        \end{scope}%
-    }%
-\makeatother%
-
-% Finds the number of elements in the array given by #1.
-% @param 1 array to iterate
-% @param 2 counter name
-\newcommand*\findarrlen[2]{%
-    \setcounter{#2}0%
-    \foreach\tmp in #1{%
-        \stepcounter{#2}%
-    }%
-}%
 
 % echos directions
 \def\echoeast{east}
@@ -136,7 +86,10 @@
         use case/.style={%
             draw,%
             ellipse%
-        }%
+        },%
+        actor label/.style={%
+            below=0pt of #1-south%
+        }
     ]%
 %
     \matrix[package body] (les-fleurs-body) {
@@ -182,7 +135,7 @@
         }%
     }{
         \findarrlen\Map{nactors}
-
+%
         % set according to \side
         %     \pactor port of actor from which to draw
         %     \actorxsgn side of the actor on the x-axis
@@ -218,10 +171,9 @@
             \node at (\actorname{}angle -| \actorname{}dist) {};
             
             % place actor 1in away in corresponding direction
-            %\actor*\actorname{\actorxsgn1in}0;
             \actor*\actorname00;
 % label the actor
-            \node[below=0pt of \actorname-south] {\actorname};
+            \node[actor label=\actorname] {\actorname};
 % associations from the actor
             % \usecaseno use case number
             \foreach\usecaseno in \Usecases {
