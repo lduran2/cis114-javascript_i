@@ -1,0 +1,9 @@
+\documentclass{article}
+\usepackage{tikz,xstring}
+\usetikzlibrary{calc}
+\def\mar{1,2,4,5,7}
+\StrCount{\mar}{,}[\arrlength]
+
+\begin{document}
+I have found \arrlength\space commas in the array.
+\end{document}
