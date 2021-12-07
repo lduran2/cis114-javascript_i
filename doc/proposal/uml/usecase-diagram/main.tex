@@ -8,6 +8,9 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHANGELOG :
+%     2021-12-06t10:39
+%         implemented `\findarrlen` to find length of arrays
+%
 %     2021-11-27t15:37
 %         integrated all actor loops
 %
@@ -92,12 +95,23 @@
                 -south/0/-30pt%
             }%
                 \coordinate (#2\port) at (\x,\y);%
-            % \foreach \port/\x/\y
+            % end \foreach \port/\x/\y
             #5%
         \end{scope}%
     }%
-\makeatother
+\makeatother%
 
+% Finds the number of elements in the array given by #1.
+% @param 1 array to iterate
+% @param 2 counter name
+\newcommand*\findarrlen[2]{%
+    \setcounter{#2}0%
+    \foreach\tmp in #1{%
+        \stepcounter{#2}%
+    }%
+}%
+
+% echos directions
 \def\echoeast{east}
 \def\echowest{west}
 
@@ -139,22 +153,29 @@
     \\
         Place the order.
     \\
+        Pay for items.
+    \\
+        Deliver items.
+    \\
     };
     \node[package head] at (les-fleurs-body.north west) {Les Fleurs Shop};
     \foreach \side/\actorname/\x in {west/User/-1in,east/Administrator/1in} {
     }
 %
+    \newcounter{MapLen}
     % draw each actor, its label and associations
     % \side the actor is of the use case packages
     % \Map actor--user case mappings
     \foreach \side/\Map in {%
         west/{%
-            User/{1,2,...,7}%
+            User/{1,2,...,7,9}%
         },%
         east/{%
             Administrator/{1,2,3}%
         }%
     }{
+        \findarrlen\Map{MapLen}
+
         % set according to \side
         %     \pactor port of actor from which to draw
         %     \actorx distance from the \side
@@ -177,11 +198,11 @@
             \node[below=0pt of \actorname-south] {\actorname};
 % associations from the actor
             % \usecaseno use case number
-            \foreach \usecaseno in \Usecases {
+            \foreach\usecaseno in \Usecases {
                 \draw (\actorname-\pactor) -- (les-fleurs-body-\usecaseno-1.\side);
             } % \foreach \usecaseno
-        } % \foreach \actorname/\Usercases
-    } % \foreach \side/\Map
+        } % end \foreach \actorname/\Usercases
+    } % end \foreach \side/\Map
 \end{tikzpicture}
 
 \end{document}
