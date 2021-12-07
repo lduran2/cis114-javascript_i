@@ -4,13 +4,16 @@
  * retrieve the art installation locations on click.
  *
  * By        : Leomar Duran <https://github.com/lduran2>
- * When      : 2021-12-06t19:32
+ * When      : 2021-12-06t20:26
  * Where     : Community College of Philadelphia
  * For       : CIS 114/JavaScript I
- * Version   : 1.2.1
+ * Version   : 1.2.2
  * Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/ajax-assignment/script.js
  *
  * CHANGELOG :
+ *     v1.2.2 - 2021-12-06t20:26
+ *         emptying the `location-results` box before populating
+ *
  *     v1.2.1 - 2021-12-06t19:32
  *         refactored `createMakeAjaxRequest` to use multiple functions
  *             for the handler
@@ -68,23 +71,54 @@ let handlePeopleAjaxResponse = createHandleIfOkResponse(
  */
 let handleLocationsAjaxRequest = createHandleIfOkResponse(
   function (evnt) {
-    /* create the ordered list element */
-    const OL_EL = document.createElement('ol');
-    /* loop through each art from the artist */
-    for (const ART of evnt.target.response.body.art) {
-      /* get the description of the location of the current artwork */
-      const DESCRIPTION = ART.location.description;
-      /* create a list item with the descripton of each location */
-      const DESCRIPTION_EL = document.createElement('li');
-      const DESCRIPTION_TEXT = document.createTextNode(DESCRIPTION);
-      DESCRIPTION_EL.appendChild(DESCRIPTION_TEXT);
-      /* append to the list */
-      OL_EL.appendChild(DESCRIPTION_EL);
-    } /* for (const ART of evnt.target.response.body.art) */
-    /* append the complete list to the `location-results` box */
-    document.querySelector('#location-results').appendChild(OL_EL);
+    /* get the `location-results` box */
+    const LOCATION_RESULTS = document.querySelector('#location-results');
+    /* create the location list */
+    const LOCATION_LIST = createLocationList(evnt.target.response.body.art);
+    /* empty the location box if necessary, and populate it */
+    emptyNode(LOCATION_RESULTS);
+    LOCATION_RESULTS.appendChild(LOCATION_LIST);
   } /* end function (evnt) */
 );
+
+/**
+ * Removes all nodes from the given node.
+ * @param node : Node = to empty
+ * @return an array of the nodes removed
+ */
+function emptyNode(node) {
+  /* for backing up the child nodes removed */
+  const CHILD_NODES = [];
+  /* remove the first child until there is none */
+  while (node.firstChild) {
+    CHILD_NODES.push(node.removeChild(node.firstChild));
+  } /* end while (node.firstChild) */
+  /* return the nodes removed */
+  return CHILD_NODES
+} /* end function emptyNode(node) */
+
+/**
+ * Create an HTML list from the given art array.
+ * @param artArray : Array = an array of art objects with location
+ *     descriptions
+ * @return the HTML list of locations
+ */
+function createLocationList(artArray) {
+  /* create the ordered list element */
+  const OL_EL = document.createElement('ol');
+  /* loop through each art from the artist */
+  for (const ART of artArray) {
+    /* get the description of the location of the current artwork */
+    const DESCRIPTION = ART.location.description;
+    /* create a list item with the descripton of each location */
+    const DESCRIPTION_EL = document.createElement('li');
+    const DESCRIPTION_TEXT = document.createTextNode(DESCRIPTION);
+    DESCRIPTION_EL.appendChild(DESCRIPTION_TEXT);
+    /* append to the list */
+    OL_EL.appendChild(DESCRIPTION_EL);
+  } /* for (const ART of artArray) */
+  return OL_EL;
+} /* end function createLocationList(artArray) */
 
 /**
  * Creates an event handler that first ensures that the target AJAX
@@ -145,6 +179,8 @@ function createMakeAjaxRequest(url, handlesOnLoad) {
 function addPersonOnClicks() {
   /* get the list items in `results` box */
   const RESULTS_LI_ELS = document.querySelectorAll('#results li');
+  /* array adapter for `handleLocationsAjaxRequest` */
+  const HANDLE_ARRAY = [ handleLocationsAjaxRequest ];
   /* loop through each list item */
   for (const LI_EL of RESULTS_LI_ELS) {
     /* get the person's URL */
@@ -153,9 +189,7 @@ function addPersonOnClicks() {
      * specific artist's databases and attaches the handler that
      * populates the `location-results` box.
      */
-    const HANDLE = createMakeAjaxRequest(
-      URL, [ handleLocationsAjaxRequest ]
-    );
+    const HANDLE = createMakeAjaxRequest(URL, HANDLE_ARRAY);
     /* add it to the list item */
     LI_EL.addEventListener('click', HANDLE);
   } /* end for (const LI_EL of RESULTS_LI_ELS) */
