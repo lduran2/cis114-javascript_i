@@ -69,8 +69,13 @@ function main(evnt) {
         return;
     } /* if (!SEARCH_FORM_EL) */
 
+    /* get and check the display item element */
+    const DISPLAY_ITEM_EL = BODY_EL.querySelector('#item .display');
+    /* create its accessor */
+    const DISPLAY_ITEM = createDisplayItem(DISPLAY_ITEM_EL);
+
     /* loop through them */
-    SEARCH_FORM_EL.addEventListener('submit', sendJsonFormRequest);
+    SEARCH_FORM_EL.addEventListener('submit', createSendJsonFormRequest(DISPLAY_ITEM));
 
     /* finish */
     console.log('Done.');
@@ -81,31 +86,33 @@ function main(evnt) {
  * and action.
  * @param formEl : Element = for which to send a JSON request
  */
-function sendJsonFormRequest(evnt) {
-    evnt.preventDefault();
-    /* get the form element */
-    const FORM_EL = evnt.target;
-    /* create a new request */
-    const REQUEST = new XMLHttpRequest();
-    /* get the form action and method */
-    const METHOD = FORM_EL.getAttribute('method');
-    const ACTION = FORM_EL.getAttribute('action');
-    /* open the request */
-    REQUEST.open(METHOD, ACTION);
-    REQUEST.responseType = JSON_TYPE;
-    /* add the load and error events */
-    REQUEST.addEventListener('load', createPopulateShopSearchResults(FORM_EL));
-    REQUEST.addEventListener('error', throwRequestLoadingError);
-    /* send the request */
-    REQUEST.send();
-} /* function sendJsonFormRequest(formEl) */
+function createSendJsonFormRequest(displayItem) {
+    return function sendJsonFormRequest(evnt) {
+        evnt.preventDefault();
+        /* get the form element */
+        const FORM_EL = evnt.target;
+        /* create a new request */
+        const REQUEST = new XMLHttpRequest();
+        /* get the form action and method */
+        const METHOD = FORM_EL.getAttribute('method');
+        const ACTION = FORM_EL.getAttribute('action');
+        /* open the request */
+        REQUEST.open(METHOD, ACTION);
+        REQUEST.responseType = JSON_TYPE;
+        /* add the load and error events */
+        REQUEST.addEventListener('load', createPopulateShopSearchResults(FORM_EL, displayItem));
+        REQUEST.addEventListener('error', throwRequestLoadingError);
+        /* send the request */
+        REQUEST.send();
+    } /* function sendJsonFormRequest(formEl) */
+}
 
 /**
  * Creates an event listener that populates the search results for Les
  * Fleurs.
  * @param evnt : Event = the event that triggers this listener
  */
-function createPopulateShopSearchResults(formEl) {
+function createPopulateShopSearchResults(formEl, displayItem) {
     return function (evnt) {
         /* log the event */
         console.log('createPopulateForm(formEl)(evnt)');
@@ -129,12 +136,12 @@ function createPopulateShopSearchResults(formEl) {
 
         /* loop through the data */
         for (const ITEM of DATA) {
-            addResultIfMatch(ITEM, RESULTS_EL, SEARCH_KEYS)
+            addResultIfMatch(ITEM, RESULTS_EL, SEARCH_KEYS, displayItem)
         }
     }; /* return function (evnt) */
 } /* end function createPopulateShopSearchResults(formEl) */
 
-function addResultIfMatch(item, resultsEl, searchKeys) {
+function addResultIfMatch(item, resultsEl, searchKeys, displayItem) {
     /* combine name and description for the search string */
     const SEARCH_STRING = [ item.name, item.description ].join();
     /* split for the search range */
@@ -145,10 +152,11 @@ function addResultIfMatch(item, resultsEl, searchKeys) {
         const LI_EL = document.createElement('li');
         /* append the items to it */
         appendDivTextsTo(item, LI_EL);
+        LI_EL.addEventListener('click', displayItem);
         /* append it to the results */
         resultsEl.appendChild(LI_EL)
-    }
-}
+    } /* if (anyIn(searchKeys, SEARCH_RANGE)) */
+} /* function addResultIfMatch(item, resultsEl, searchKeys) */
 
 /**
  * Throws a request loading error.
@@ -161,6 +169,26 @@ function throwRequestLoadingError(evnt) {
     /* stop the program */
     throw 'error loading request';
 } /* end function throwRequestLoadingError(evnt) */
+
+function createDisplayItem(displayItemEl) {
+    return function (evnt) {
+        const liEl = evnt.target;
+        /* empty the displayItemEl */
+        emptyNode(displayItemEl);
+        /* loop through parents until liEl points to the list item */
+        while (liEl.tagName.toLowerCase() != 'li') {
+            liEl = liEl.parentNode;
+        }
+        /* loop through the children elements of the listEl */
+        for (const EL of liEl.children) {
+            /* copy the element into the display-item box */
+            const CLONE_EL = EL.cloneNode(true);
+            displayItemEl.appendChild(CLONE_EL);
+        } /* for (const EL of liEl.children) */
+        /* make item (grandparent) active */
+        displayItemEl.parentNode.parentNode.classList.add('active');
+    } /* */
+}
 
 /**
  * Removes all nodes from the given node.

@@ -21,24 +21,21 @@
     </header>
     <form id='search' action='../db/catalog.json' method='get' class='page active'>
       <ol class='cart-adder'>
-        <li><label>Search for</label><input type='text' name='keys' /></li>
+        <li><label for='keys'>Search in name or description for</label><input id='keys' type='text' name='keys' value='flower'/></li>
         <li><button type='submit'>Go!</button></li>
       </ol>
       <ol id='search-results'></ol>
     </form>
     <form id='item' action='?' class='page'>
-      <h2 class='item-name'>Goblin Gaillardia</h2>
-      <p class='price'>$32.00</p>
-      <p class='item-picture'><img src='../images/goblin-gaillardia-flower.jpg' alt='Goblin Gaillardia' /></p>
-      <div class='item-description'>
-        <p>A beautiful plant with many large flowers and a large variety of bright warm colors.</p>
-      </div>
       <ol class='cart-adder'>
+        <div class='display'>
+        </div>
         <li><label>Quantity</label><input type='number' name='quantity' /></li>
         <li><button type='submit'>Add to cart!</button></li>
       </ol>
     </form>
     <form id='cart' action='?' class='page'>
+      <ol id='cart-list'></ol>
       <p><button type='submit'>Buy!</button></p>
     </form>
   </body>
