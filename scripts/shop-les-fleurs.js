@@ -85,7 +85,6 @@ function sendJsonFormRequest(evnt) {
     evnt.preventDefault();
     /* get the form element */
     const FORM_EL = evnt.target;
-    alert(FORM_EL);
     /* create a new request */
     const REQUEST = new XMLHttpRequest();
     /* get the form action and method */
@@ -119,29 +118,37 @@ function createPopulateShopSearchResults(formEl) {
             throw `${evnt.target.status}: ${evnt.target.statusText}`;
         } /* if (OK_STATUS !== evnt.target.status) */
 
+        /* get the results element */
+        const RESULTS_EL = formEl.querySelector('#search-results');
+        /* split up the search keys */
+        const SEARCH_KEYS = formEl.elements['keys'].value.split(' ');
         /* get the response data */
         const DATA = evnt.target.response;
-        /* iterate the keys of DATA */
-        for (const KEY of Object.keys(DATA)) {
-            /* get the value at KEY in DATA */
-            const VALUE = DATA[KEY];
-            /* if the type of VALUE is string */
-            if ('string'===typeof VALUE) {
-                /* update corresponding form element's value */
-                formEl.elements[KEY].value = VALUE;
-                /* and the field's size */
-                formEl.elements[KEY].setAttribute('size', VALUE.length);
-            } /* end if ('string'===typeof VALUE) { */
-            /* if the type of VALUE is an object */
-            else if ('object'===typeof VALUE) {
-                /* get the corresponding list */
-                const LIST_EL = formEl.querySelector(`#${KEY}`);
-                /* append the items in VALUE to the list */
-                appendItemTextsTo(VALUE, LIST_EL);
-            } /* end if ('object'===typeof VALUE) */
-        } /* for (const KEY of Object.keys(DATA)) */
+
+        emptyNode(RESULTS_EL);
+
+        /* loop through the data */
+        for (const ITEM of DATA) {
+            addResultIfMatch(ITEM, RESULTS_EL, SEARCH_KEYS)
+        }
     }; /* return function (evnt) */
-} /* end function createPopulateForm(formEl) */
+} /* end function createPopulateShopSearchResults(formEl) */
+
+function addResultIfMatch(item, resultsEl, searchKeys) {
+    /* combine name and description for the search string */
+    const SEARCH_STRING = [ item.name, item.description ].join();
+    /* split for the search range */
+    const SEARCH_RANGE = SEARCH_STRING.split(' ');
+    /* check if this item matches the search results */
+    if (anyIn(searchKeys, SEARCH_RANGE)) {
+        /* create a list element */
+        const LI_EL = document.createElement('li');
+        /* append the items to it */
+        appendDivTextsTo(item, LI_EL);
+        /* append it to the results */
+        resultsEl.appendChild(LI_EL)
+    }
+}
 
 /**
  * Throws a request loading error.
@@ -156,22 +163,64 @@ function throwRequestLoadingError(evnt) {
 } /* end function throwRequestLoadingError(evnt) */
 
 /**
+ * Removes all nodes from the given node.
+ * @param node : Node = to empty
+ * @return an array of the nodes removed
+ */
+function emptyNode(node) {
+  /* for backing up the child nodes removed */
+  const CHILD_NODES = [];
+  /* remove the first child until there is none */
+  while (node.firstChild) {
+    CHILD_NODES.push(node.removeChild(node.firstChild));
+  } /* end while (node.firstChild) */
+  /* return the nodes removed */
+  return CHILD_NODES
+} /* end function emptyNode(node) */
+
+/**
+ * Returns whether any of the strings in keys is in the given range.
+ * @param keys : Array = of strings for which to search
+ * @param range : Array = of strings in which to search
+ * @return true if any of the strings in keys is in the given range;
+ * false otherwise.
+ */
+function anyIn(keys, range) {
+    /* loop through the keys */
+    for (const KEY of keys) {
+        /* loop through the range */
+        for (const RANGE of range) {
+            /* compare both ignoring case */
+            /* if equal */
+            if (KEY.toLowerCase()===RANGE.toLowerCase()) {
+                /* return true */
+                return true;
+            } /* end if (KEY.toLowerCase()===RANGE.toLowerCase()) */
+        } /* end for (const RANGE of range) */
+    } /* end for (const KEY of keys) */
+    /* if here, then none of the keys was found */
+    return false;
+} /* end function anyIn(keys, range) */
+
+/**
  * Assembles list items from the given array of items and adds them
  * to the given list.
  * @param items = stringable items to add to the list
  * @param listEl : Node = list element to append the list items to
  */
-function appendItemTextsTo(items, listEl) {
+function appendDivTextsTo(item, parentNode) {
     /* loop through the object */
-    for (const ITEM of items) {
-        /* assemble a list item element */
-        const LI_EL = document.createElement('li');
-        const ITEM_TEXT = document.createTextNode(ITEM);
-        LI_EL.appendChild(ITEM_TEXT);
+    for (const KEYS of Object.keys(item)) {
+        /* assemble a division element */
+        const DIV_EL = document.createElement('div');
+        const DIV_TEXT = document.createTextNode(item[KEYS]);
+        /* add the key as the class name */
+        DIV_EL.classList.add(KEYS);
+        DIV_EL.appendChild(DIV_TEXT);
         /* append the list item */
-        listEl.appendChild(LI_EL);
-    } /* for (const ITEM of items) */
-} /* end function appendItemTextsTo(items, listEl) */
+        parentNode.appendChild(DIV_EL);
+    } /* for (const KEYS of item) */
+} /* end function appendItemTextsTo(item, listEl) */
 
 /* add main to the window load event */
 document.addEventListener('DOMContentLoaded', main);
