@@ -210,9 +210,9 @@ function createDisplayItem(displayItemEl, itemPointer) {
             displayItemEl.parentNode.classList.add('active');
             /* save this item */
             itemPointer[0] = currentItem;
-        } /* */
+        }
     }
-}
+} /* function createDisplayItem(displayItemEl, itemPointer)*/
 
 function createAddToCart(itemPointer, cart, cartOlEl) {
     return function (evnt) {
@@ -234,23 +234,41 @@ function createAddToCart(itemPointer, cart, cartOlEl) {
         CART_IMG.src = CART_IMG.src.replace('empty', 'full');
         /* add to the cart object */
         cart[itemPointer[0].name] = QUANTITY;
-        /* update the cart element */
-        emptyNode(cartOlEl);
-        /* assemble an array of the item to quantity mappings */
-        const ITEM_STRINGS = [];
-        for (const ITEM of Object.keys(cart)) {
-            ITEM_STRINGS.push([ ITEM, ': ', cart[ITEM] ].join(''));
-        }
-        /* unpack and append it to the list */
-        appendItemTextsTo(ITEM_STRINGS, cartOlEl);
+        /* update the cart */
+        updateCartElement(cart, cartOlEl);
     }
-}
+} /* function createAddToCart(itemPointer, cart, cartOlEl) */
 
 function createBuyInCart(cart) {
     return function (evnt) {
-        
+        evnt.preventDefault();
+        /* get the form element */
+        const FORM_EL = evnt.target;
+        /* get and check the display item element */
+        const CART_OL_EL = FORM_EL.querySelector('#cart-list');
+        /* update the cart image */
+        const CART_IMG = FORM_EL.querySelector('#cart-icon');
+        CART_IMG.src = CART_IMG.src.replace('full', 'empty');
+        /* delete every item in the cart */
+        for (const ITEM of Object.keys(cart)) {
+            delete cart[ITEM];
+        }
+        /* update the cart */
+        updateCartElement(cart, CART_OL_EL);
     }
-}
+} /* function createBuyInCart(cart) */
+
+function updateCartElement(cart, cartOlEl) {
+    /* update the cart element */
+    emptyNode(cartOlEl);
+    /* assemble an array of the item to quantity mappings */
+    const ITEM_STRINGS = [];
+    for (const ITEM of Object.keys(cart)) {
+        ITEM_STRINGS.push([ ITEM, ': ', cart[ITEM] ].join(''));
+    }
+    /* unpack and append it to the list */
+    appendItemTextsTo(ITEM_STRINGS, cartOlEl);
+} /* function updateCartElement(cart, cartOlEl) */
 
 /**
  * Removes all nodes from the given node.
