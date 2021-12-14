@@ -23,9 +23,22 @@ header + *, .item-picture + * {
     clear: left;
 }
 
-.item-area {
-    width: 75%;
+.page {
+    visibility: hidden;
+    position: absolute;
+}
+
+.page.active {
+    visibility: visible;
+    position: static;
+}
+
+#search, #item {
     background: rgb(255, 191, 127);
+}
+
+#item {
+    width: 75%;
 }
 
 h2, .price {

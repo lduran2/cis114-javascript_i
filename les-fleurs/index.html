@@ -5,23 +5,31 @@
     <title>Final Project - Les Fleurs Shop</title>
     <meta name='description' content='An example covering everything we learned in CIS 114.'/>
     <link rel='stylesheet' href='../styles/les-fleurs.css' />
+    <script src='../scripts/shop-les-fleurs.js'></script>
   <head>
   <body>
     <header>
       <h1>Les Fleurs Shop</h1>
-      <div class='navigation'>
+      <nav id='navigation'>
         <ul>
           <li><a href='#search'>Search</a></li>
           <li><a href='#item'>Last item</a></li>
           <li><a href='#cart'>View cart</a></li>
           <li><a href='#buy'>Checkout</a></li>
         </ul>
-      </div>
+      </nav>
     </header>
-    <form id='item'>
+    <form id='search' action='../db/catalog.json' method='get' class='page active'>
+      <ol class='cart-adder'>
+        <li><label>Search for</label><input type='text' name='items' /></li>
+        <li><button type='submit'>Go!</button></li>
+      </ol>
+      <ol id='search-results'></ol>
+    </form>
+    <form id='item' action='?' class='page'>
       <h2 class='item-name'>Goblin Gaillardia</h2>
       <p class='price'>$32.00</p>
-      <p class='item-picture'><img src='../images/goblin-gaillardia-flower.jpg' /></p>
+      <p class='item-picture'><img src='../images/goblin-gaillardia-flower.jpg' alt='Goblin Gaillardia' /></p>
       <div class='item-description'>
         <p>A beautiful plant with many large flowers and a large variety of bright warm colors.</p>
       </div>
@@ -29,6 +37,9 @@
         <li><label>Quantity</label><input type='number' name='quantity' /></li>
         <li><button type='submit'>Add to cart!</button></li>
       </ol>
+    </form>
+    <form id='cart' action='?' class='page'>
+      <p><button type='submit'>Buy!</button></p>
     </form>
   </body>
 </html>
