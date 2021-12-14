@@ -1,5 +1,9 @@
 @charset 'utf-8';
 
+body {
+    font-family: verdana, geneva, tahoma, sans-serif;
+}
+
 header {
     float: left;
     background: rgb(127, 191, 255);
@@ -43,12 +47,10 @@ header + *, .item-picture + * {
 }
 
 #search-results img {
-    float: left;
     width: 5em;
 }
 
 #search-results .name {
-    float: left;
     font-size: 2em;
 }
 
@@ -58,6 +60,10 @@ header + *, .item-picture + * {
 
 #item {
     width: 75%;
+}
+
+#item img {
+    width: 500px;
 }
 
 .item-picture img {

@@ -27,16 +27,19 @@
       <ol id='search-results'></ol>
     </form>
     <form id='item' action='?' class='page'>
+      <div class='display'></div>
       <ol class='cart-adder'>
-        <div class='display'>
-        </div>
-        <li><label>Quantity</label><input type='number' name='quantity' /></li>
+        <li><label for='quantity'>Quantity<input id='quantity' type='number' name='quantity' min='0' value='0' /></label></li>
         <li><button type='submit'>Add to cart!</button></li>
       </ol>
     </form>
     <form id='cart' action='?' class='page'>
+      <p><img src='../images/empty-cart.png' id='cart-icon' alt='cart is empty' /></p>
       <ol id='cart-list'></ol>
       <p><button type='submit'>Buy!</button></p>
     </form>
   </body>
 </html>
+<!--
+  resources: 
+  -->

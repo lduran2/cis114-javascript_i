@@ -57,6 +57,10 @@ const OK_STATUS = 200;
  * @param evnt : Event = the event that triggers this listener
  */
 function main(evnt) {
+    const ITEM_POINTER = [];
+    /* the cart object */
+    const CART = {};
+
     /* get and check the document document body */
     const BODY_EL = document.querySelector('body');
     if (!BODY_EL) {
@@ -69,13 +73,36 @@ function main(evnt) {
         return;
     } /* if (!SEARCH_FORM_EL) */
 
-    /* get and check the display item element */
-    const DISPLAY_ITEM_EL = BODY_EL.querySelector('#item .display');
-    /* create its accessor */
-    const DISPLAY_ITEM = createDisplayItem(DISPLAY_ITEM_EL);
+    /* get and check the item form */
+    const ITEM_FORM_EL = BODY_EL.querySelector('#item');
+    if (!ITEM_FORM_EL) {
+        return;
+    } /* if (!ITEM_FORM_EL) */
 
-    /* loop through them */
+    /* get and check the display item element */
+    const DISPLAY_ITEM_EL = ITEM_FORM_EL.querySelector('.display');
+    if (!DISPLAY_ITEM_EL) {
+        return;
+    } /* if (!DISPLAY_ITEM_EL) */
+    /* create its accessor */
+    const DISPLAY_ITEM = createDisplayItem(DISPLAY_ITEM_EL, ITEM_POINTER);
+
+    /* get and check the item form */
+    const CART_FORM_EL = BODY_EL.querySelector('#cart');
+    if (!CART_FORM_EL) {
+        return;
+    } /* if (!CART_FORM_EL) */
+
+    /* get and check the display item element */
+    const CART_OL_EL = CART_FORM_EL.querySelector('#cart-list');
+    if (!CART_OL_EL) {
+        return;
+    } /* if (!CART_OL_EL) */
+
+    /* add form submit events */
     SEARCH_FORM_EL.addEventListener('submit', createSendJsonFormRequest(DISPLAY_ITEM));
+    ITEM_FORM_EL.addEventListener('submit', createAddToCart(ITEM_POINTER, CART, CART_OL_EL));
+    CART_FORM_EL.addEventListener('submit', createBuyInCart(CART));
 
     /* finish */
     console.log('Done.');
@@ -152,7 +179,7 @@ function addResultIfMatch(item, resultsEl, searchKeys, displayItem) {
         const LI_EL = document.createElement('li');
         /* append the items to it */
         appendDivTextsTo(item, LI_EL);
-        LI_EL.addEventListener('click', displayItem);
+        LI_EL.addEventListener('click', displayItem(item));
         /* append it to the results */
         resultsEl.appendChild(LI_EL)
     } /* if (anyIn(searchKeys, SEARCH_RANGE)) */
@@ -170,24 +197,59 @@ function throwRequestLoadingError(evnt) {
     throw 'error loading request';
 } /* end function throwRequestLoadingError(evnt) */
 
-function createDisplayItem(displayItemEl) {
+function createDisplayItem(displayItemEl, itemPointer) {
+    return function (currentItem) {
+        return function (evnt) {
+            const liEl = evnt.target;
+            /* empty the displayItemEl */
+            emptyNode(displayItemEl);
+            /* add the item to the display-item box */
+            appendDivTextsTo(currentItem, displayItemEl);
+            /* make item (parent) active */
+            console.log(currentItem);
+            displayItemEl.parentNode.classList.add('active');
+            /* save this item */
+            itemPointer[0] = currentItem;
+        } /* */
+    }
+}
+
+function createAddToCart(itemPointer, cart, cartOlEl) {
     return function (evnt) {
-        const liEl = evnt.target;
-        /* empty the displayItemEl */
-        emptyNode(displayItemEl);
-        /* loop through parents until liEl points to the list item */
-        while (liEl.tagName.toLowerCase() != 'li') {
-            liEl = liEl.parentNode;
+        evnt.preventDefault();
+        /* get the form element */
+        const FORM_EL = evnt.target;
+        /* get the quantity */
+        const QUANTITY = FORM_EL.elements['quantity'].value;
+        /* check that the quantity is greater than 0 */
+        /* if not, then stop */
+        if (QUANTITY <= 0) {
+            return;
         }
-        /* loop through the children elements of the listEl */
-        for (const EL of liEl.children) {
-            /* copy the element into the display-item box */
-            const CLONE_EL = EL.cloneNode(true);
-            displayItemEl.appendChild(CLONE_EL);
-        } /* for (const EL of liEl.children) */
-        /* make item (grandparent) active */
-        displayItemEl.parentNode.parentNode.classList.add('active');
-    } /* */
+        /* active the parent node */
+        cartOlEl.parentNode.classList.add('active');
+        /* update the cart image */
+        const CART_FORM_EL = cartOlEl.parentNode;
+        const CART_IMG = CART_FORM_EL.querySelector('#cart-icon');
+        CART_IMG.src = CART_IMG.src.replace('empty', 'full');
+        /* add to the cart object */
+        cart[itemPointer[0].name] = QUANTITY;
+        /* update the cart element */
+        emptyNode(cartOlEl);
+        /* assemble an array of the item to quantity mappings */
+        const ITEM_STRINGS = [];
+        for (const ITEM of Object.keys(cart)) {
+            ITEM_STRINGS.push([ ITEM, ': ', cart[ITEM] ].join(''));
+        }
+        /* unpack and append it to the list */
+        appendItemTextsTo(ITEM_STRINGS, cartOlEl);
+    }
+}
+
+function createBuyInCart(cart) {
+    return function (evnt) {
+        
+    }
 }
 
 /**
@@ -233,12 +295,13 @@ function anyIn(keys, range) {
 } /* end function anyIn(keys, range) */
 
 /**
- * Assembles list items from the given array of items and adds them
- * to the given list.
+ * Assembles division or images elements from the given array of items and adds them
+ * to the given parent node.
  * @param items = stringable items to add to the list
- * @param listEl : Node = list element to append the list items to
+ * @param parentNode : Node = node to append the list items to
  */
 function appendDivTextsTo(item, parentNode) {
+    console.log(parentNode);
     /* create the image for the picture and name */
     const IMG_EL = document.createElement('img');
     IMG_EL.setAttribute('src', ['../images/', item.picture].join(''));
@@ -259,8 +322,26 @@ function appendDivTextsTo(item, parentNode) {
         DIV_EL.appendChild(DIV_TEXT);
         /* append the list item */
         parentNode.appendChild(DIV_EL);
-    } /* for (const KEYS of item) */
-} /* end function appendItemTextsTo(item, listEl) */
+    } /* for (const KEYS of Object.keys(item)) */
+} /* end function appendDivTextsTo(item, parentNode) */
+
+/**
+ * Assembles list items from the given array of items and adds them
+ * to the given list.
+ * @param items = stringable items to add to the list
+ * @param listEl : Node = list element to append the list items to
+ */
+function appendItemTextsTo(items, listEl) {
+    /* loop through the object */
+    for (const ITEM of items) {
+        /* assemble a list item element */
+        const LI_EL = document.createElement('li');
+        const ITEM_TEXT = document.createTextNode(ITEM);
+        LI_EL.appendChild(ITEM_TEXT);
+        /* append the list item */
+        listEl.appendChild(LI_EL);
+    } /* for (const ITEM of items) */
+} /* end function appendItemTextsTo(items, listEl) */
 
 /* add main to the window load event */
 document.addEventListener('DOMContentLoaded', main);
