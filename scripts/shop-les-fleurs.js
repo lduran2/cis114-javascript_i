@@ -99,10 +99,16 @@ function main(evnt) {
         return;
     } /* if (!CART_OL_EL) */
 
+    /* get and check the display item element */
+    const RECEIPT_EL = BODY_EL.querySelector('#receipt');
+    if (!RECEIPT_EL) {
+        return;
+    } /* if (!RECEIPT_EL) */
+
     /* add form submit events */
     SEARCH_FORM_EL.addEventListener('submit', createSendJsonFormRequest(DISPLAY_ITEM));
     ITEM_FORM_EL.addEventListener('submit', createAddToCart(ITEM_POINTER, CART, CART_OL_EL));
-    CART_FORM_EL.addEventListener('submit', createBuyInCart(CART));
+    CART_FORM_EL.addEventListener('submit', createBuyInCart(CART, RECEIPT_EL));
 
     /* finish */
     console.log('Done.');
@@ -170,7 +176,7 @@ function createPopulateShopSearchResults(formEl, displayItem) {
 
 function addResultIfMatch(item, resultsEl, searchKeys, displayItem) {
     /* combine name and description for the search string */
-    const SEARCH_STRING = [ item.name, item.description ].join();
+    const SEARCH_STRING = [ item.name, item.description ].join(' ');
     /* split for the search range */
     const SEARCH_RANGE = SEARCH_STRING.split(' ');
     /* check if this item matches the search results */
@@ -233,13 +239,13 @@ function createAddToCart(itemPointer, cart, cartOlEl) {
         const CART_IMG = CART_FORM_EL.querySelector('#cart-icon');
         CART_IMG.src = CART_IMG.src.replace('empty', 'full');
         /* add to the cart object */
-        cart[itemPointer[0].name] = QUANTITY;
+        cart[itemPointer[0].name] = { 'quantity': QUANTITY, 'item': itemPointer[0] };
         /* update the cart */
         updateCartElement(cart, cartOlEl);
     }
 } /* function createAddToCart(itemPointer, cart, cartOlEl) */
 
-function createBuyInCart(cart) {
+function createBuyInCart(cart, receiptEl) {
     return function (evnt) {
         evnt.preventDefault();
         /* get the form element */
@@ -249,12 +255,22 @@ function createBuyInCart(cart) {
         /* update the cart image */
         const CART_IMG = FORM_EL.querySelector('#cart-icon');
         CART_IMG.src = CART_IMG.src.replace('full', 'empty');
-        /* delete every item in the cart */
+
+        /* calculate receipt */
+        let receipt_sum = 0;
+        /* and delete every item in the cart */
         for (const ITEM of Object.keys(cart)) {
+            receipt_sum += (cart[ITEM].quantity * cart[ITEM].item.price);
             delete cart[ITEM];
         }
         /* update the cart */
         updateCartElement(cart, CART_OL_EL);
+        /* active the receipt node */
+        receiptEl.classList.add('active');
+        const RECEIPT_P_EL = document.createElement('p');
+        const RECEIPT_TEXT = document.createTextNode(['You have spent $', receipt_sum, '.'].join(''));
+        RECEIPT_P_EL.appendChild(RECEIPT_TEXT);
+        receiptEl.appendChild(RECEIPT_P_EL);
     }
 } /* function createBuyInCart(cart) */
 
@@ -264,7 +280,7 @@ function updateCartElement(cart, cartOlEl) {
     /* assemble an array of the item to quantity mappings */
     const ITEM_STRINGS = [];
     for (const ITEM of Object.keys(cart)) {
-        ITEM_STRINGS.push([ ITEM, ': ', cart[ITEM] ].join(''));
+        ITEM_STRINGS.push([ ITEM, ': ', cart[ITEM].quantity ].join(''));
     }
     /* unpack and append it to the list */
     appendItemTextsTo(ITEM_STRINGS, cartOlEl);
