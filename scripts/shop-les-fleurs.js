@@ -192,10 +192,12 @@ function anyIn(keys, range) {
         for (const RANGE of range) {
             /* compare both ignoring case */
             /* if equal */
-            if (KEY.toLowerCase()===RANGE.toLowerCase()) {
+            if (RANGE.toLowerCase().indexOf(KEY.toLowerCase()) >= 0) {
                 /* return true */
                 return true;
-            } /* end if (KEY.toLowerCase()===RANGE.toLowerCase()) */
+            } /* end if (RANGE.toLowerCase().indexOf(KEY.toLowerCase())
+                             >= 0)
+               */
         } /* end for (const RANGE of range) */
     } /* end for (const KEY of keys) */
     /* if here, then none of the keys was found */
@@ -209,8 +211,18 @@ function anyIn(keys, range) {
  * @param listEl : Node = list element to append the list items to
  */
 function appendDivTextsTo(item, parentNode) {
+    /* create the image for the picture and name */
+    const IMG_EL = document.createElement('img');
+    IMG_EL.setAttribute('src', ['../images/', item.picture].join(''));
+    IMG_EL.setAttribute('alt', item.name);
+    /* append it */
+    parentNode.appendChild(IMG_EL);
     /* loop through the object */
     for (const KEYS of Object.keys(item)) {
+        /* skip the picture which we already handled */
+        if (KEYS==='picture') {
+            continue;
+        }
         /* assemble a division element */
         const DIV_EL = document.createElement('div');
         const DIV_TEXT = document.createTextNode(item[KEYS]);

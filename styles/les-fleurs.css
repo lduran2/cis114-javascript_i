@@ -37,16 +37,27 @@ header + *, .item-picture + * {
     background: rgb(255, 191, 127);
 }
 
+#search-results li:hover {
+    cursor: pointer;
+    background: rgb(255, 223, 127);
+}
+
+#search-results img {
+    float: left;
+    width: 5em;
+}
+
+#search-results .name {
+    float: left;
+    font-size: 2em;
+}
+
+#search-results .description {
+    clear: left;
+}
+
 #item {
     width: 75%;
-}
-
-h2, .price {
-    text-align: right;
-}
-
-.item-picture {
-    float: left;
 }
 
 .item-picture img {
