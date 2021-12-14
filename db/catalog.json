@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Goblin Gaillardia",
+        "price": 32.00,
+        "picture": "goblin-gaillardia-flower.jpg",
+        "description": "A beautiful plant with many large flowers and a large variety of bright warm colors."
+    },
+    {
+        "name": "Anemone His Excellency",
+        "price": 16.99,
+        "picture": "anemone-his-excellency-flower.jpg",
+        "description": "A poppy-like flower with a monochrome red color scheme."
+    }
+]
