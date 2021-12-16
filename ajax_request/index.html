@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <title>Concepts Assignment - Simple AJAX Request</title>
+    <meta name='description' content='A simple example of an AJAX request.' />
+    <script src='../scripts/populate_json_forms.js'></script>
+  </head>
+  <body>
+    <form action='../db/leomar.json' method='get'>
+      <h1>Simple AJAX Request</h1>
+      <p>
+        My name is <input type='text' name='given-name' disabled />.
+        I'm from the <input type='text' name='family-name' disabled /> family.
+        My major is <input type='text' name='major' disabled />.
+        I have left to complete the following courses.
+      </p>
+      <ol id='courses-to-do'></ol>
+    </form>
+  </body>
+</html>
