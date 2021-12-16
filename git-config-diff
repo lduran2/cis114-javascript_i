@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+# /git-config-diff
+# Configures the diff function for PowerPoint files to decompress
+# before comparison.
+#
+# By        : Leomar Durán <https://github.com/lduran2/>
+# When      : 2021-12-13t19:31
+# Where     : Temple University
+# For       : CIS 114
+# Version   : 1.0.0
+# Canonical : https://github.com/lduran2/cis114-javascript_i/blob/master/git-config-diff
+#
+# CHANGELOG :
+#    v1.0.0 - 2021-12-13t19:31
+#        `git-config-filters` -> `git-config-diff`
+#
+#    v1.0.0 - 2021-12-13t19:03
+#        set to unzip on diff
+git config diff.zip.textconv 'unzip -c -a'
