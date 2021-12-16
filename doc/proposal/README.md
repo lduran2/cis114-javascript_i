@@ -22,7 +22,7 @@ The conceptual design of the project's script is mainly procedural, but uses obj
 
 ### Building
 
-The project may be downloaded from <a href='https://github.com/lduran2/cis114-javascript_i/tree/final'>the <code>final</code> branch</a> or together with the other projects in the <a href='https://github.com/lduran2/cis114-javascript_i/master/final'>the <code>master</code> branch</a>.  There will be a release for `final` available once complete.
+The project may be downloaded from [the `final` branch][final-branch] or together with the other projects in the <a href='https://github.com/lduran2/cis114-javascript_i/master/final'>the <code>master</code> branch</a>.  There will be a release for `final` available once complete.
 
 To install the latest version from the Terminal, use the following commands.
 
@@ -66,7 +66,11 @@ The `8000` is the default port number for the server and may be changed, but mus
 
 [canonical]: https://github.com/lduran2/cis114-javascript_i/master/PROPOSAL-final/doc/proposal#readme "Canonical link to this PROPOSAL"
 
+[final-branch]: ../..
+[master-branch]: ../../../master
+
 [presentation-img]: presentation.png "A typical workflow of the project.  The user performs a search, which sends a request to the catalog. Then the user picks an item, which updates to the shopping page. On the shopping page, the seller is then requested information about the item, then user may choose how many of that item to buy. This this updates to the cart, where the user may buy and receive a receipt."
+[presentation-doc]: 
 
 [uml-usecase-img]: uml-usecase-diagram.png "The service is a contract between the user, their payment service and home address to/from the administrator, item database, cart, the seller and deliveries department."
 [uml-usecase-doc]: uml-usecase-diagram.pdf
