@@ -18,12 +18,14 @@ This project makes use of HTML5 and CSS Level 2 for the Graphical User Interface
 
 ### Building
 
-The project may be downloaded from [the `final` branch][final-branch].  There will be a release available once complete.
+The project may be downloaded from [the <code>final</code> branch][final-branch].  There will be a release available once complete.
 
 To install the latest version, use the following commands.
 
 <table id='tab-building'>
 <caption>Downloading and setting up the final project.</caption>
+<tr>
+<td>
 
 ```bash
 # clone the repo
@@ -33,6 +35,8 @@ git clone https://github.com/lduran2/cis114-javascript_i.git
 git checkout final
 ```
 
+</td>
+</tr>
 </table>
 
 ### Running
@@ -41,19 +45,21 @@ An HTTP server is necessary to run the project and is not included. For this pur
 
 <table id='tab-running'>
 <caption>Runing the HTTP server.</caption>
+<tr>
+<td>
 
 ```sh
 cd public
 python -m http.server 8000
 ```
 
+</td>
+</tr>
 </table>
   
 from the root directory of the project.
 
-</table>
-
-After starting a server, use the browser to go to `http://localhost:8000` on their web browser.
+After starting a server, use the browser to go to <http://localhost:8000> on their web browser.
 
 The `8000` is the default port number and may be changed, but should be consistent between its use in [Table 2][#tab-running] and in the address bar of your browser.
 
