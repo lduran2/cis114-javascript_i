@@ -2,6 +2,8 @@
 
 * [Canonical][canonical]
 
+[![Presentation of the Interface][presentation-img]][presentation-doc]
+
 ## Project abstraction
 
 [![UML Use Case Diagram][uml-usecase-img]][uml-usecase-doc]
@@ -20,9 +22,9 @@ The conceptual design of the project's script is mainly procedural, but uses obj
 
 ### Building
 
-The project may be downloaded from <a href='https://github.com/lduran2/cis114-javascript_i/tree/final'>the <code>final</code> branch</a> or together with the other projects in the <a href='https://github.com/lduran2/cis114-javascript_i/master/final'>the <code>master</code> branch</a>.  There will be a release available once complete.
+The project may be downloaded from <a href='https://github.com/lduran2/cis114-javascript_i/tree/final'>the <code>final</code> branch</a> or together with the other projects in the <a href='https://github.com/lduran2/cis114-javascript_i/master/final'>the <code>master</code> branch</a>.  There will be a release for `final` available once complete.
 
-To install the latest version from the terminal, use the following commands.
+To install the latest version from the Terminal, use the following commands.
 
 ```bash
 # clone the repo
@@ -50,21 +52,23 @@ The `8000` is the default port number for the server and may be changed, but mus
 
 ## Required resources
 * Competencies
-  * Git
+  * ECMAscript 12
   * HTML5
   * CSS Level 2
-  * ECMAscript 12
-  * being able to use the terminal
+  * being able to use the Terminal
 * Equipment
   * Hardware
     * A personal computer (a low end desktop or laptop will do)
   * Software
     * any graphical OS
     * a modern web browser
-    * Git
+    * a way to start a server, such as [Python][python]
 
 [canonical]: https://github.com/lduran2/cis114-javascript_i/master/PROPOSAL-final/doc/proposal#readme "Canonical link to this PROPOSAL"
+
+[presentation-img]: presentation.png "A typical workflow of the project.  The user performs a search, which sends a request to the catalog. Then the user picks an item, which updates to the shopping page. On the shopping page, the seller is then requested information about the item, then user may choose how many of that item to buy. This this updates to the cart, where the user may buy and receive a receipt."
 
 [uml-usecase-img]: uml-usecase-diagram.png "The service is a contract between the user, their payment service and home address to/from the administrator, item database, cart, the seller and deliveries department."
 [uml-usecase-doc]: uml-usecase-diagram.pdf
 
+[python]: https://www.python.org/downloads/
