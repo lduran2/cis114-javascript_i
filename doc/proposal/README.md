@@ -63,9 +63,9 @@ The `8000` is the default port number for the server and may be changed, but mus
     * a modern web browser
     * a way to start a server, such as [Python][python]
 
-[canonical]: https://github.com/lduran2/cis114-javascript_i/master/PROPOSAL-final/doc/proposal#readme "Canonical link to this PROPOSAL"
+[canonical]: https://github.com/lduran2/cis114-javascript_i/tree/master/doc/proposal#readme "Canonical link to this PROPOSAL"
 
-[final-branch]: https://github.com/lduran2/cis114-javascript_i/tree/PROPOSAL-final
+[final-branch]: https://github.com/lduran2/cis114-javascript_i/tree/final
 [master-branch]: https://github.com/lduran2/cis114-javascript_i/
 
 [presentation-img]: presentation.png "A typical workflow of the project.  The user performs a search, which sends a request to the catalog. Then the user picks an item, which updates to the shopping page. On the shopping page, the seller is then requested information about the item, then user may choose how many of that item to buy. This this updates to the cart, where the user may buy and receive a receipt."
