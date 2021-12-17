@@ -1,1 +1,4 @@
 *.zip
+
+# Microsoft Office temporary storage files
+~$*.ppt?
