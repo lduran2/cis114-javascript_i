@@ -1,0 +1,37 @@
+v1.6.0 - 2021-11-08t23:19	Leomar Duran <https://github.com/lduran2>
+	fixer.js: change all .change-me elements to level 6 headings
+
+v1.5.0 - 2021-11-08t21:40	Leomar Duran <https://github.com/lduran2>
+	fixer.js: add an aside at the end of the web page
+
+v1.4.0 - 2021-11-08t21:32	Leomar Duran <https://github.com/lduran2>
+	fixer.js:
+		added new items to the knowledge list
+		removed 'How to use Microsoft Word'
+
+v1.3.2 - 2021-11-08t19:10	Leomar Duran <https://github.com/lduran2>
+	fixer.js:
+		optimized the 'this' emphasis to replace original text
+		cloning the 'this' emphasis, rather than reconstructing each
+			time
+
+v1.3.1 - 2021-11-08t19:10	Leomar Duran <https://github.com/lduran2>
+	fixer.js: appended text to the heading of the knowledge list
+
+v1.3.0 - 2021-11-08t19:04	Leomar Duran <https://github.com/lduran2>
+	fixer.js: found the heading of the knowledge list
+
+v1.2.0 - 2021-11-08t18:37	Leomar Duran <https://github.com/lduran2>
+	fixer.js: change the class of the ordered list
+
+v1.1.0 - 2021-11-08t18:27	Leomar Duran <https://github.com/lduran2>
+	fixer.js: added emphasis to all 'this' the main title
+
+v1.0.2 - 2021-11-08t17:31	Leomar Duran <https://github.com/lduran2>
+	fixer.js: size the Mars image
+
+v1.0.1 - 2021-11-08t17:31	Leomar Duran <https://github.com/lduran2>
+	fixer.js: set the image source to Mars
+
+v1.0.0 - 2021-11-08t17:04	Leomar Duran <https://github.com/lduran2>
+	fixer.js: loaded the Mars image and alerted a confirmation message
