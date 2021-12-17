@@ -40,11 +40,10 @@ An HTTP server is necessary to run the project and is not included. For this pur
 
 <a name='running-server'></a>
 ```sh
-cd www
 python -m http.server 8000
 ```
 
-Whichever server you prefer, the server must be started from `/www` where `/` is the root directory of the project.
+Whichever server you prefer, the server must be started from the root directory of the project.
 
 After starting a server, use the browser to navigate to <http://localhost:8000/les-fleurs/>.
 
